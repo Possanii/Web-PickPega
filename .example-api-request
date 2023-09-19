@@ -1,0 +1,47 @@
+import { httpsCallableFromURL } from "firebase/functions";
+import { instance, functions } from "./src/app/api/FirebaseConfig";
+
+export function App() {
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // REQUISIÇÃO GET PRECISA SER COM AXIOS !!! CALLABLE NÃO PARA PARÂMETROS
+
+  const getRestaurantById = (id: string) => {
+    instance.get(`getRestaurantById/?id=${id}`).then((data) => {
+      console.log(data);
+    });
+  };
+
+  getRestaurantById("padraorestaurante");
+
+  // OUTRAS REQUISIÇÕES PODE USAR O AXIOS COMO AS FUNÇÕES DO FIREBASE, SEGUE UM EXEMPLO:
+
+  const createRestaurant = httpsCallableFromURL(
+    functions,
+    `https://southamerica-east1-pick-pega.cloudfunctions.net/api/addNewRestaurante`
+  );
+  createRestaurant({
+    categoria: "pizzaria",
+    email: "restaurante1@gmail.com",
+    endereco: "rua tal, numero x, cidade z",
+    foto: "link do bucket /fotorestaurante",
+    nome: "Gustavo pizzaria",
+    senha: "senha123",
+    x: "-9.853731",
+    y: "8.928211",
+  })
+    .then((result) => {
+      // Read result of the Cloud Function.
+      /** @type {any} */
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log("🚀 ~ file: App.tsx:45 ~ App ~ error:", error);
+      // Getting the Error details.
+      // const code = error.code;
+      // const message = error.message;
+      // const details = error.details;
+      // ...
+    });
+}
