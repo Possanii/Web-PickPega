@@ -8,7 +8,9 @@
   </a>
   </p>
 </div>
+
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 To run this project, follow this steps bellow.
@@ -22,6 +24,7 @@ To see more about npm click [here](https://www.npmjs.com/)
 Once you have npm installed you can run the following both to install and upgrade Yarn:
 
 - yarn
+
   ```sh
   npm install --global yarn
   ```
@@ -31,18 +34,25 @@ Once you have npm installed you can run the following both to install and upgrad
 First, you need to clone this project.
 
 1. Clone the repo
+
    ```sh
    git clone https://github.com/Possanii/Web-PickPega.git
    ```
+
 2. Install Yarn packages
+
    ```sh
    yarn
    ```
+
    or
+
    ```sh
    yarn install
    ```
+
 3. Rename the `.env.example` to `.env` and fill the information with your firebase config
+
    ```js
    VITE_APP_FIREBASE_APIKEY =
      VITE_APP_FIREBASE_AUTHDOMAIN =
