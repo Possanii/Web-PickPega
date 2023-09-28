@@ -20,10 +20,13 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// instancias das functions do firebase
 const functions = getFunctions(app);
 
+// instancia do axios para fazer requisições via http
 const instance = axios.create({
   baseURL: "https://southamerica-east1-pick-pega.cloudfunctions.net/api/",
 });
 
-export { functions, instance };
+export { app, functions, instance };
