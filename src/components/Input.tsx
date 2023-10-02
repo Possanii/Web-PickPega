@@ -1,41 +1,48 @@
-import { forwardRef } from "react";
+import { ComponentProps, forwardRef } from "react";
 import { cn } from "../app/utils/cn";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
-interface InputProps {
-  /**
-   * A string type that you want the component accept.
-   */
-  type?: "text" | "password" | "email" | "image" | "file";
-  /**
-   * A string of all className you want applied to the base component.
-   */
-  className?: string;
-  /**
-   * A boolean indicating whether the component is required or not.
-   */
-  required?: boolean;
-  /**
-   * A function that get all changes on the component
-   */
-  onChange?(value: React.ChangeEvent<HTMLInputElement>): void;
+interface InputProps extends ComponentProps<"input"> {
+  name: string;
+  error?: string;
 }
 
 // Usei o forwardRef para que ele consiga referenciar a qual elemento pai ele pertence
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function (
-  { className, type, required, onChange },
-  ref
-) {
-  return (
-    <input
-      className={cn(
-        "bg-gray-100 h-[35px] rounded-lg px-[10px] text-base leading-none text-black outline-none hover:border-2 focus:border-[3px] hover:border-light-yellow/50 focus:border-light-yellow",
-        className
-      )}
-      type={type}
-      onChange={onChange}
-      ref={ref}
-      required={required}
-    />
-  );
-});
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, placeholder, name, id, error, ...rest }, ref) => {
+    const inputId = id ?? name;
+    return (
+      <div className="relative">
+        <input
+          {...rest}
+          id={inputId}
+          name={name}
+          ref={ref}
+          className={cn(
+            "bg-gray-100 w-full h-[52px] rounded-lg px-3 hover:px-2.5 focus:px-[9px] pt-4 placeholder-shown:pt-0 text-base leading-none text-black outline-none border hover:border-2 focus:border-[3px] hover:border-light-yellow/50 focus:border-light-yellow peer",
+            error && "!border-red-900",
+            className
+          )}
+          placeholder=" "
+        />
+
+        <label
+          htmlFor={inputId}
+          className="absolute text-xs left-3 top-1.5 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 transition-all"
+        >
+          {placeholder}
+        </label>
+
+        {error && (
+          <div className="flex gap-2 items-center mt-2 text-red-900">
+            <CrossCircledIcon />
+            <span className="text-xs">{error}</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+Input.displayName = "Input";

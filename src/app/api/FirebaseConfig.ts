@@ -26,7 +26,7 @@ const functions = getFunctions(app);
 
 // instancia do axios para fazer requisições via http
 const instance = axios.create({
-  baseURL: "https://southamerica-east1-pick-pega.cloudfunctions.net/api/",
+  baseURL: import.meta.env.VITE_APP_FIREBASE_URL,
 });
 
 export { app, functions, instance };
