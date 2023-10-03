@@ -5,45 +5,74 @@ import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  CrossCircledIcon,
 } from "@radix-ui/react-icons";
 import { cn } from "../app/utils/cn";
+import { UseFormRegisterReturn } from "react-hook-form";
 
-interface SelectProps {
+interface SelectProps extends UseFormRegisterReturn {
   children: React.ReactNode;
   /**
    * A string to show when no items are selected
    */
   placeholder?: string;
+  /**
+   * A string name for reference
+   */
+  name: string;
+  /**
+   * A string error to display when something went wrong
+   */
+  error?: string;
+  /**
+   * A input value to display when no items are selected
+   */
+  value?: string;
 }
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
-  ({ children, placeholder, ...props }, forwardedRef) => {
+  (
+    { children, placeholder, name, onChange, value, error, ...props },
+    forwardedRef
+  ) => {
     return (
-      <RdxSelect.Root {...props}>
-        <RdxSelect.Trigger
-          className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white text-violet11 shadow-[0_2px_10px] shadow-black/10 hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-violet9 outline-none"
-          aria-label="Food"
-          ref={forwardedRef}
+      <div className="flex flex-col">
+        <RdxSelect.Root
+          name={name}
+          onValueChange={(value) => onChange({ target: { name, value } })}
+          value={value}
+          {...props}
         >
-          <RdxSelect.Value placeholder={placeholder} />
-          <RdxSelect.Icon>
-            <ChevronDownIcon />
-          </RdxSelect.Icon>
-        </RdxSelect.Trigger>
-        <RdxSelect.Portal>
-          <RdxSelect.Content className="overflow-hidden bg-white rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
-            <RdxSelect.ScrollUpButton className="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
-              <ChevronUpIcon />
-            </RdxSelect.ScrollUpButton>
-            <RdxSelect.Viewport className="p-[5px]">
-              {children}
-            </RdxSelect.Viewport>
-            <RdxSelect.ScrollDownButton>
+          <RdxSelect.Trigger
+            className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none h-[52px] gap-[5px] bg-white text-violet11 shadow-[0_2px_10px] shadow-black/10 hover:bg-mauve3 focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-violet9 outline-none"
+            ref={forwardedRef}
+          >
+            <RdxSelect.Value placeholder={placeholder} />
+            <RdxSelect.Icon>
               <ChevronDownIcon />
-            </RdxSelect.ScrollDownButton>
-          </RdxSelect.Content>
-        </RdxSelect.Portal>
-      </RdxSelect.Root>
+            </RdxSelect.Icon>
+          </RdxSelect.Trigger>
+          <RdxSelect.Portal>
+            <RdxSelect.Content className="overflow-hidden bg-white rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+              <RdxSelect.ScrollUpButton className="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
+                <ChevronUpIcon />
+              </RdxSelect.ScrollUpButton>
+              <RdxSelect.Viewport className="p-[5px]">
+                {children}
+              </RdxSelect.Viewport>
+              <RdxSelect.ScrollDownButton>
+                <ChevronDownIcon />
+              </RdxSelect.ScrollDownButton>
+            </RdxSelect.Content>
+          </RdxSelect.Portal>
+        </RdxSelect.Root>
+        {error && (
+          <div className="flex gap-2 items-center mt-2 text-red-900">
+            <CrossCircledIcon />
+            <span className="text-xs">{error}</span>
+          </div>
+        )}
+      </div>
     );
   }
 );

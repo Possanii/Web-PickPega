@@ -1,70 +1,94 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { authService } from "../../../app/services/authService";
+import { categories } from "../../../app/types/categories";
+import { uf } from "../../../app/types/uf";
+import { storageService } from "../../../app/services/storageService";
+import cResponse from "../../../app/interface/cResponse";
+import { locationService } from "../../../app/services/locationService";
 
-const typesRestaurant = [
-  "Açaí",
-  "Adega",
-  "Bar",
-  "Cafeteria",
-  "Conveniência",
-  "Culinária japonesa",
-  "Doceria",
-  "Hamburgueria",
-  "Marmitaria",
-  "Padaria",
-  "Pastelaria",
-  "Pizzaria",
-  "Salgado",
-  "Sorveteria",
-] as const;
-
-const uf = [
-  "AC",
-  "AL",
-  "AP",
-  "AM",
-  "BA",
-  "CE",
-  "DF",
-  "ES",
-  "GO",
-  "MA",
-  "MT",
-  "MS",
-  "MG",
-  "PA",
-  "PB",
-  "PR",
-  "PE",
-  "PI",
-  "RJ",
-  "RN",
-  "RS",
-  "RO",
-  "RR",
-  "SC",
-  "SE",
-  "SP",
-  "TO",
-] as const;
+const MAX_FILE_SIZE = 500000;
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 
 const registerSchema = z.object({
-  name: z.string().nonempty(),
-  email: z.string().nonempty().email(),
-  password: z.string().nonempty().min(8),
-  category: z.enum(typesRestaurant),
-  address: z.object({
-    street: z.string().nonempty(),
-    number: z.number().positive(),
-    neighborhood: z.string().nonempty(),
-    city: z.string().nonempty(),
-    uf: z.enum(uf),
-    zip: z.number().positive(),
+  name: z.string().nonempty("Insira o nome do estabelecimento"),
+  email: z.string().nonempty("Insira um email").email("Insira um email válido"),
+  password: z
+    .string()
+    .nonempty("insira uma senha")
+    .min(8, "A senha deve conter no mínimo 8 caracteres"),
+  category: z.enum(categories, {
+    errorMap: (issue) => {
+      switch (issue.code) {
+        case "invalid_type":
+          return { message: "Selecione uma opção válida." };
+        case "invalid_enum_value":
+          return { message: "Selecione uma opção válida." };
+        default:
+          return { message: "Selecione uma opção" };
+      }
+    },
   }),
-  photo: z.string(),
-  x: z.number(),
-  y: z.number(),
+  address: z.object({
+    street: z.string().nonempty("Insira um logadouro"),
+    number: z
+      .number({
+        errorMap: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return { message: "Insira somente números." };
+            default:
+              return { message: "Insira um número" };
+          }
+        },
+      })
+      .positive("Insira um número válido"),
+    neighborhood: z.string().nonempty("Insira um bairro"),
+    city: z.string().nonempty("Insira uma cidade"),
+    uf: z.enum(uf, {
+      errorMap: (issue) => {
+        switch (issue.code) {
+          case "invalid_type":
+            return { message: "Selecione uma opção válida." };
+          case "invalid_enum_value":
+            return { message: "Selecione uma opção válida." };
+          default:
+            return { message: "Selecione uma opção" };
+        }
+      },
+    }),
+    zip: z
+      .number({
+        errorMap: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return { message: "Insira somente números." };
+            default:
+              return { message: "Insira um zip" };
+          }
+        },
+      })
+      .positive("Insira um zip válido"),
+  }),
+  photo: z
+    .custom<FileList>()
+    .refine((files) => files?.length === 1, "Insira uma imagem.")
+    .refine(
+      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+      `Tamanho máximo da imagem é de 5MB.`
+    )
+    .refine(
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      "Selecione uma imagem tipo .jpg, .jpeg, .png ou .webp."
+    ),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
 });
 
 type FormData = z.infer<typeof registerSchema>;
@@ -74,13 +98,54 @@ export function useRegisterController() {
     register,
     handleSubmit: hookFormHandleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
   } = useForm<FormData>({
     resolver: zodResolver(registerSchema),
   });
 
   const handleSubmit = hookFormHandleSubmit(async (data) => {
-    console.log(data);
+    const response: cResponse = { status: 400 };
+    const photo = await storageService.uploadToStorage(
+      data.photo[0],
+      "/FotosRestaurantes"
+    );
+    if (photo.status !== 200) {
+      return photo;
+    }
+
+    const geoLocation = await locationService.getGeoPosition(data.address.zip);
+
+    if (geoLocation.status !== 200) {
+      return geoLocation;
+    }
+
+    try {
+      const result = await authService.signup({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+        category: data.category,
+        address: {
+          street: data.address.street,
+          number: data.address.number,
+          neighborhood: data.address.neighborhood,
+          city: data.address.city,
+          uf: data.address.uf,
+          zip: data.address.zip,
+        },
+        photo: photo.payload!.url,
+        lat: geoLocation.payload!.lat,
+        lng: geoLocation.payload!.lng,
+      });
+      response.status = 200;
+      response.message = "Successfully created";
+      response.payload = result;
+      return response;
+    } catch (error) {
+      await storageService.deleteFromStorage(photo.payload!.url);
+    }
   });
 
-  return { handleSubmit, register, errors };
+  return { handleSubmit, register, errors, getValues, setValue };
 }

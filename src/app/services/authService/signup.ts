@@ -15,15 +15,25 @@ interface SignupProps {
     zip: number;
   };
   photo: string;
-  x: number;
-  y: number;
+  lat: number;
+  lng: number;
 }
 
 export async function signup(data: SignupProps) {
-  const response: cResponse = { status: 401 };
-  await instance.post("/addNewRestaurante", data).then((result) => {
-    console.log(result);
-
-    return response;
-  });
+  const response: cResponse = {
+    status: 400,
+    message: "Something went wrong when creating a new restaurant.",
+  };
+  await instance
+    .post("/addNewRestaurante", data)
+    .then((result) => {
+      response.status = 200;
+      response.message = "Successfully created a new restaurant";
+      response.payload = result.data;
+    })
+    .catch((error) => {
+      response.status = 500;
+      response.message = error.message;
+    });
+  return response;
 }

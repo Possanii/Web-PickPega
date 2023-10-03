@@ -1,16 +1,21 @@
 import { ComponentProps, forwardRef } from "react";
 import { cn } from "../app/utils/cn";
-import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { CrossCircledIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 interface InputProps extends ComponentProps<"input"> {
   name: string;
   error?: string;
+  search?: boolean;
+  onSearchClick?(): void;
 }
 
 // Usei o forwardRef para que ele consiga referenciar a qual elemento pai ele pertence
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, placeholder, name, id, error, ...rest }, ref) => {
+  (
+    { className, placeholder, name, id, error, search, onSearchClick, ...rest },
+    ref
+  ) => {
     const inputId = id ?? name;
     return (
       <div className="relative">
@@ -33,6 +38,19 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         >
           {placeholder}
         </label>
+
+        {search && (
+          <button
+            type="button"
+            className={cn(
+              "absolute top-1/2 right-2 cursor-pointer",
+              error && "!top-1/4"
+            )}
+            onClick={onSearchClick}
+          >
+            <MagnifyingGlassIcon />
+          </button>
+        )}
 
         {error && (
           <div className="flex gap-2 items-center mt-2 text-red-900">

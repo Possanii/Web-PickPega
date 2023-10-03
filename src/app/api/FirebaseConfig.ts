@@ -2,6 +2,7 @@
 import axios from "axios";
 import { initializeApp } from "firebase/app";
 import { getFunctions } from "firebase/functions";
+import { getStorage } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -24,9 +25,12 @@ const app = initializeApp(firebaseConfig);
 // instancias das functions do firebase
 const functions = getFunctions(app);
 
+// Firebase storage reference
+const storage = getStorage(app);
+
 // instancia do axios para fazer requisições via http
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_FIREBASE_URL,
 });
 
-export { app, functions, instance };
+export { app, functions, storage, instance };
