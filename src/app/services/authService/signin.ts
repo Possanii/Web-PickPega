@@ -10,42 +10,29 @@ interface SigninProps {
 }
 
 export async function signin({ email, password }: SigninProps) {
-  const response: cResponse = { status: 401 };
+  const response: cResponse = { status: 400, message: "Algo deu errado" };
   await signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
       // Signed in
       const user = userCredential.user;
 
       response.status = 200;
-      response.toast = {
-        title: "Success",
-        content: "Successfully signed in",
-      };
+      response.message = "Logado com sucesso";
       response.payload = user;
     })
     .catch((error) => {
       switch (error.code) {
         case "auth/invalid-login-credentials":
           response.status = 401;
-          response.toast = {
-            title: "Login ou senha inválidos",
-            content: "Suas credencias estão incorretas. Tente novamente.",
-          };
+          response.message = "Login ou senha inválidos";
           break;
         case "auth/too-many-requests":
           response.status = 429;
-          response.toast = {
-            title: "Muitas requisições",
-            content:
-              "As solicitações foram bloqueadas devido a atividades incomuns. Tente novamente depois que algum tempo.",
-          };
+          response.message = "Muitas requisições";
           break;
         default:
           response.status = error.code;
-          response.toast = {
-            title: error.code,
-            content: error.message,
-          };
+          response.message = "Algo deu errado";
           break;
       }
     });

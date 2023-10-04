@@ -22,13 +22,13 @@ interface SignupProps {
 export async function signup(data: SignupProps) {
   const response: cResponse = {
     status: 400,
-    message: "Something went wrong when creating a new restaurant.",
+    message: "Algo deu errado ao criar restaurante",
   };
   await instance
     .post("/addNewRestaurante", data)
     .then((result) => {
       response.status = 200;
-      response.message = "Successfully created a new restaurant";
+      response.message = "Restaurante criado com sucesso";
       response.payload = result.data;
     })
     .catch((error) => {

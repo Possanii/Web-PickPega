@@ -7,7 +7,7 @@ import { useLoginController } from "./useLoginController";
 import { Link } from "react-router-dom";
 
 export function Login() {
-  const { handleSubmit, register, errors } = useLoginController();
+  const { handleSubmit, register, errors, isLoading } = useLoginController();
 
   return (
     <>
@@ -40,7 +40,7 @@ export function Login() {
               {...register("password")}
             />
 
-            <Button text="Login" type="submit" />
+            <Button text="Login" type="submit" isLoading={isLoading} />
           </form>
         </Card.Root>
       </Container>

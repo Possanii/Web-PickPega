@@ -13,7 +13,7 @@ import { useState } from "react";
 
 export function Register() {
   const [ufValue, setUfValue] = useState();
-  const { handleSubmit, register, errors, getValues, setValue } =
+  const { handleSubmit, register, errors, getValues, setValue, isLoading } =
     useRegisterController();
   return (
     <>
@@ -146,7 +146,7 @@ export function Register() {
               {...register("photo")}
             />
 
-            <Button text="Cadastrar" type="submit" />
+            <Button text="Cadastrar" type="submit" isLoading={isLoading} />
           </form>
         </Card.Root>
       </Container>

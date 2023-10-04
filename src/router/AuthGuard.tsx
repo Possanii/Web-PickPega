@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../app/hooks/useAuth";
 
 // Interface para tipar as props do AuthGuard
 interface AuthGuardProps {
@@ -8,7 +9,7 @@ interface AuthGuardProps {
 // Verifica se o usuário está logado e se ele tem permissão para acessar rotas privadas.
 
 export function AuthGuard({ isPrivate }: AuthGuardProps) {
-  const signedIn = false;
+  const { signedIn } = useAuth();
 
   if (!signedIn && isPrivate) {
     return <Navigate to="/login" replace />;

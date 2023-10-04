@@ -1,8 +1,11 @@
 // Import the functions you need from the SDKs you need
 import axios from "axios";
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFunctions } from "firebase/functions";
 import { getStorage } from "firebase/storage";
+import { localStorageKeys } from "../config/localStorageKeys";
+import { sleep } from "../utils/sleep";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -28,9 +31,28 @@ const functions = getFunctions(app);
 // Firebase storage reference
 const storage = getStorage(app);
 
+// Firebase auth reference
+const auth = getAuth(app);
+
 // instancia do axios para fazer requisições via http
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_FIREBASE_URL,
 });
 
-export { app, functions, storage, instance };
+instance.interceptors.request.use((config) => {
+  const accessToken = localStorage.getItem(localStorageKeys.ACCESS_TOKEN);
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return config;
+});
+
+instance.interceptors.response.use(async (data) => {
+  await sleep();
+
+  return data;
+});
+
+export { app, functions, storage, auth, instance };

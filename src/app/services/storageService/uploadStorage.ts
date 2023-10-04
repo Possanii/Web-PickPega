@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 import cResponse from "../../interface/cResponse";
 
 export async function uploadToStorage(image: File, path: string) {
-  const response: cResponse = { status: 401 };
+  const response: cResponse = { status: 401, message: "Algo deu errado" };
 
   const storageRef = ref(storage, `${path}/${image.name + "-" + v4()}`);
 
@@ -13,19 +13,19 @@ export async function uploadToStorage(image: File, path: string) {
       await getDownloadURL(snapshot.ref)
         .then((url) => {
           response.status = 200;
-          response.message = "Successfully uploaded";
+          response.message = "Armazenado com sucesso";
           response.payload = { url: url };
           return response;
         })
         .catch(() => {
           response.status = 500;
-          response.message = "Failed to get download url to storage";
+          response.message = "Falha ao pegar a url da imagem";
           return response;
         });
     })
     .catch(() => {
       response.status = 500;
-      response.message = "Failed to upload to storage";
+      response.message = "Falha ao armazenar a imagem";
       return response;
     });
   return response;

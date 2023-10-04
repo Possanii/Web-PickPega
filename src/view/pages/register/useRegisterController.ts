@@ -5,8 +5,10 @@ import { authService } from "../../../app/services/authService";
 import { categories } from "../../../app/types/categories";
 import { uf } from "../../../app/types/uf";
 import { storageService } from "../../../app/services/storageService";
-import cResponse from "../../../app/interface/cResponse";
 import { locationService } from "../../../app/services/locationService";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { useAuth } from "../../../app/hooks/useAuth";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -104,48 +106,64 @@ export function useRegisterController() {
     resolver: zodResolver(registerSchema),
   });
 
+  const { mutateAsync, isLoading } = useMutation({
+    mutationFn: async (data: FormData) => {
+      const photo = await storageService.uploadToStorage(
+        data.photo[0],
+        "/FotosRestaurantes"
+      );
+
+      if (photo.status !== 200) {
+        return photo;
+      }
+
+      const geoLocation = await locationService.getGeoPosition(
+        data.address.zip
+      );
+
+      if (geoLocation.status !== 200) {
+        return geoLocation;
+      }
+
+      try {
+        const result = await authService.signup({
+          email: data.email,
+          password: data.password,
+          name: data.name,
+          category: data.category,
+          address: {
+            street: data.address.street,
+            number: data.address.number,
+            neighborhood: data.address.neighborhood,
+            city: data.address.city,
+            uf: data.address.uf,
+            zip: data.address.zip,
+          },
+          photo: photo.payload!.url,
+          lat: geoLocation.payload!.lat,
+          lng: geoLocation.payload!.lng,
+        });
+
+        return result;
+      } catch (error) {
+        await storageService.deleteFromStorage(photo.payload!.url);
+        return { status: 500, message: "Falha ao criar restaurante" };
+      }
+    },
+  });
+
+  const { singin } = useAuth();
+
   const handleSubmit = hookFormHandleSubmit(async (data) => {
-    const response: cResponse = { status: 400 };
-    const photo = await storageService.uploadToStorage(
-      data.photo[0],
-      "/FotosRestaurantes"
-    );
-    if (photo.status !== 200) {
-      return photo;
-    }
+    const response = await mutateAsync(data);
 
-    const geoLocation = await locationService.getGeoPosition(data.address.zip);
-
-    if (geoLocation.status !== 200) {
-      return geoLocation;
-    }
-
-    try {
-      const result = await authService.signup({
-        email: data.email,
-        password: data.password,
-        name: data.name,
-        category: data.category,
-        address: {
-          street: data.address.street,
-          number: data.address.number,
-          neighborhood: data.address.neighborhood,
-          city: data.address.city,
-          uf: data.address.uf,
-          zip: data.address.zip,
-        },
-        photo: photo.payload!.url,
-        lat: geoLocation.payload!.lat,
-        lng: geoLocation.payload!.lng,
-      });
-      response.status = 200;
-      response.message = "Successfully created";
-      response.payload = result;
-      return response;
-    } catch (error) {
-      await storageService.deleteFromStorage(photo.payload!.url);
+    if (response.status === 200) {
+      toast.success(response.message);
+      singin(response.payload!.accessToken);
+    } else {
+      toast.error(response.message);
     }
   });
 
-  return { handleSubmit, register, errors, getValues, setValue };
+  return { handleSubmit, register, errors, getValues, setValue, isLoading };
 }

@@ -3,7 +3,7 @@ import { ref, deleteObject } from "firebase/storage";
 import cResponse from "../../interface/cResponse";
 
 export async function deleteFromStorage(path: string) {
-  const response: cResponse = { status: 401 };
+  const response: cResponse = { status: 401, message: "Algo deu errado" };
 
   const storageRef = ref(storage, path);
 
@@ -11,12 +11,12 @@ export async function deleteFromStorage(path: string) {
   await deleteObject(storageRef)
     .then(() => {
       response.status = 200;
-      response.message = "Successfully deleted";
+      response.message = "Imagem deletada com sucesso";
       return response;
     })
     .catch(() => {
       response.status = 500;
-      response.message = "Failed to delete from storage";
+      response.message = "Falha ao deletar imagem";
       return response;
     });
   return response;

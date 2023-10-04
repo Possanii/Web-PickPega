@@ -42,10 +42,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {search && (
           <button
             type="button"
-            className={cn(
-              "absolute top-1/2 right-2 cursor-pointer",
-              error && "!top-1/4"
-            )}
+            className={cn("absolute top-5 right-2 cursor-pointer")}
             onClick={onSearchClick}
           >
             <MagnifyingGlassIcon />

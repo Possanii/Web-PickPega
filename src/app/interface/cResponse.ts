@@ -1,9 +1,6 @@
-import { ToastProps } from "../../components/Toast";
-
 interface cResponse {
   status: number;
-  message?: string;
-  toast?: ToastProps;
+  message: string;
   payload?: unknown;
 }
 
