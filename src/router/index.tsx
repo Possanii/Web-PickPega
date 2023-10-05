@@ -4,6 +4,7 @@ import { Login } from "../view/pages/login";
 import { Register } from "../view/pages/register";
 import { Dashboard } from "../view/pages/dashboard";
 import { AdmLayout } from "../view/layouts/admLayout";
+import { PageNotFound } from "../components/PageNotFound";
 
 export function Router() {
   return (
@@ -11,7 +12,7 @@ export function Router() {
       <Routes>
         {/* Rotas publicas */}
         <Route element={<AuthGuard isPrivate={false} />}>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />W
           <Route path="/register" element={<Register />} />
         </Route>
         {/* Rota Privada e com layout fixo */}
@@ -19,6 +20,7 @@ export function Router() {
           <Route element={<AdmLayout />}>
             <Route path="/" element={<Dashboard />} />
           </Route>
+          <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>
