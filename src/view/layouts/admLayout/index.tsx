@@ -9,7 +9,7 @@ export function AdmLayout() {
     <div className="flex h-full w-full">
       <Sidebar setExpand={setSideMenuIsExpand} />
       <div
-        className={`flex-1 min-h-screen mx-0 bg-slate-100 transition-all duration-300 ease-in-out ${
+        className={`flex-1 flex-col min-h-screen mx-0 p-8 bg-slate-100 transition-all duration-300 ease-in-out ${
           sideMenuIsExpand ? "md:ml-72" : "md:ml-20"
         }`}
       >

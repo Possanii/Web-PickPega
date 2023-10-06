@@ -5,16 +5,18 @@ import { nav } from "../../../_nav";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../app/hooks/useAuth";
 import { Button } from "../../../components/Button";
+import { useUser } from "../../../app/hooks/useUser";
 
 interface SidebarProps {
   setExpand: (value: boolean) => void;
 }
 
 const Sidebar: FC<SidebarProps> = ({ setExpand }) => {
-  const username = "Miles Heizer";
-  const company = "Unilever";
-  const profilePic =
-    "https://firebasestorage.googleapis.com/v0/b/pick-pega.appspot.com/o/FotosRestaurantes%2FLogo.png-4ecc4d5d-3231-4870-8894-68707ee44fff?alt=media&token=a6d8e4d4-41d8-4aa6-84f4-da145d727a65";
+  const { user } = useUser();
+
+  const username = user?.name;
+  const company = user?.category;
+  const profilePic = user?.photo;
   const link = "/";
 
   const [openedMenu, setOpenedMenu] = useState<Record<string, any>>({});
