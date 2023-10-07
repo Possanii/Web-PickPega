@@ -5,6 +5,7 @@ import { Register } from "../view/pages/register";
 import { Dashboard } from "../view/pages/dashboard";
 import { AdmLayout } from "../view/layouts/admLayout";
 import { PageNotFound } from "../components/PageNotFound";
+import { MenuItems } from "../view/pages/menu";
 
 export function Router() {
   return (
@@ -19,6 +20,7 @@ export function Router() {
         <Route element={<AuthGuard isPrivate />}>
           <Route element={<AdmLayout />}>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/menu" element={<MenuItems />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Route>

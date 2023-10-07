@@ -185,7 +185,7 @@ const Sidebar: FC<SidebarProps> = ({ setExpand }) => {
       role="navigation"
       className={[
         "bg-light-yellow border-r border-light-yellow shadow-sm absolute inset-y-0 left-0",
-        "duration-300 ease-in-out md:fixed md:translate-x-0",
+        "duration-300 ease-in-out md:fixed md:translate-x-0 z-[999]",
         `${
           isExpand
             ? "bg-light-yellow w-72"
