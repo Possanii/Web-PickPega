@@ -1,4 +1,4 @@
-export const uf = [
+export const UF = [
   "AC",
   "AL",
   "AP",

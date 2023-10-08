@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authService } from "../../../app/services/authService";
-import { categories } from "../../../app/types/categories";
-import { uf } from "../../../app/types/uf";
+import { CATEGORIES } from "../../../app/constants/categories";
+import { UF } from "../../../app/constants/uf";
 import { storageService } from "../../../app/services/storageService";
 import { locationService } from "../../../app/services/locationService";
 import { useMutation } from "@tanstack/react-query";
@@ -25,7 +25,7 @@ const registerSchema = z.object({
     .string()
     .nonempty("insira uma senha")
     .min(8, "A senha deve conter no mínimo 8 caracteres"),
-  category: z.enum(categories, {
+  category: z.enum(CATEGORIES, {
     errorMap: (issue) => {
       switch (issue.code) {
         case "invalid_type":
@@ -53,7 +53,7 @@ const registerSchema = z.object({
       .positive("Insira um número válido"),
     neighborhood: z.string().nonempty("Insira um bairro"),
     city: z.string().nonempty("Insira uma cidade"),
-    uf: z.enum(uf, {
+    uf: z.enum(UF, {
       errorMap: (issue) => {
         switch (issue.code) {
           case "invalid_type":

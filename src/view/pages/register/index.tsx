@@ -6,8 +6,8 @@ import background from "../../../assets/images/background.png";
 import { useRegisterController } from "./useRegisterController";
 import { Link } from "react-router-dom";
 import { Select, SelectItem } from "../../../components/Select";
-import { categories } from "../../../app/types/categories";
-import { uf } from "../../../app/types/uf";
+import { CATEGORIES } from "../../../app/constants/categories";
+import { UF } from "../../../app/constants/uf";
 import { searchAddressByZip } from "../../../app/services/locationService/searchAddressByZip";
 import { useState } from "react";
 
@@ -60,7 +60,7 @@ export function Register() {
                 {...register("category")}
                 error={errors.category?.message}
               >
-                {categories.map((category, index) => {
+                {CATEGORIES.map((category, index) => {
                   return (
                     <SelectItem key={index} value={category}>
                       {category}
@@ -128,7 +128,7 @@ export function Register() {
                 error={errors.address?.uf?.message}
                 {...register("address.uf")}
               >
-                {uf.map((uf, index) => {
+                {UF.map((uf, index) => {
                   return (
                     <SelectItem key={index} value={uf}>
                       {uf}

@@ -13,21 +13,21 @@ export function MenuSliderNavigation({
   const swiper = useSwiper();
 
   return (
-    <div className="flex gap-4 mb-4">
+    <>
       <button
-        className="py-3 pl-2.5 pr-3.5 rounded-full enabled:bg-light-yellow bg-black/10 transition-colors disabled:opacity-40"
+        className="p-2.5 h-[52px] z-10 rounded-full enabled:bg-light-yellow bg-black/10 transition-colors disabled:opacity-40 absolute left-0 top-2"
         onClick={() => swiper.slidePrev()}
         disabled={isBeginning}
       >
         <ChevronLeftIcon className="text-white w-6 h-6" />
       </button>
       <button
-        className="py-3 pl-2.5 pr-3.5 rounded-full enabled:bg-light-yellow bg-black/10 transition-colors disabled:opacity-40"
+        className="p-2.5 h-[52px] z-10 rounded-full enabled:bg-light-yellow bg-black/10 transition-colors disabled:opacity-40 absolute right-0 top-2"
         onClick={() => swiper.slideNext()}
         disabled={isEnd}
       >
         <ChevronRightIcon className="text-white w-6 h-6" />
       </button>
-    </div>
+    </>
   );
 }
