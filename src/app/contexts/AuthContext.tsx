@@ -1,7 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { localStorageKeys } from "../config/localStorageKeys";
 import { useQuery } from "@tanstack/react-query";
-import { usersServices } from "../services/usersServices";
+import { usersServices } from "../services/usersService";
 import toast from "react-hot-toast";
 import { PageLoader } from "../../components/PageLoader";
 

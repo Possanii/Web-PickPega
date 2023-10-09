@@ -2,6 +2,7 @@ import { instance, auth } from "../../api/FirebaseConfig";
 import { sleep } from "../../utils/sleep";
 
 interface MeResponse {
+  uid: string;
   name: string;
   email: string;
   category: string;

@@ -1,53 +1,99 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { MenuSliderNavigation } from "./MenuSliderNavigation";
 import { useMenuController } from "./useMenuController";
-import { CATEGORIES } from "../../../../../app/constants/categories";
 import { SliderOptions } from "./SliderOptions";
+import emptyStateImage from "../../../../../assets/images/empty-state.svg";
+import { CardMenu } from "./cards";
+import { Button } from "../../../../../components/Button";
+import { Spinner } from "../../../../../components/Spinner";
 
 // Import Swiper styles
 import "swiper/css";
-import { CardMenu } from "./cards";
 
 export function ItemsListMenu() {
-  const { sliderState, setSliderState } = useMenuController();
+  const {
+    sliderState,
+    setSliderState,
+    items,
+    isInitialLoading,
+    isLoading,
+    openNewItemMenuModal,
+    filterOptions,
+  } = useMenuController();
+
+  const hasItems = items.length > 0 && items[0]?.length !== 0;
 
   return (
     <>
-      <strong className="text-light-yellow text-lg font-bold">
-        Categorias
-      </strong>
-      <div className="mt-2 mb-4 max-h-full">
-        <Swiper
-          spaceBetween={16}
-          slidesPerView={3}
-          onSlideChange={(swiper) => {
-            setSliderState({
-              isBeginning: swiper.isBeginning,
-              isEnd: swiper.isEnd,
-            });
-          }}
-          centeredSlides
-        >
-          <MenuSliderNavigation
-            isBeginning={sliderState.isBeginning}
-            isEnd={sliderState.isEnd}
-          />
-          {CATEGORIES.map((category, index) => (
-            <SwiperSlide key={category}>
-              {({ isActive }) => (
-                <SliderOptions
-                  category={category}
-                  isActive={isActive}
-                  index={index}
-                />
+      {isInitialLoading && (
+        <div className="flex flex-col items-center justify-center h-full">
+          <Spinner className="h-40 w-40" />
+        </div>
+      )}
+
+      {!isInitialLoading && (
+        <>
+          {!hasItems && (
+            <div className="h-full flex flex-col justify-center items-center">
+              <img src={emptyStateImage} className="h-40 w-40" />
+              <span>Nenhum item encontrado.</span>
+              <Button
+                text="Cadastrar item"
+                onClick={openNewItemMenuModal}
+                className="w-40"
+              />
+            </div>
+          )}
+          {hasItems && (
+            <div>
+              <strong className="text-light-yellow text-lg font-bold">
+                Categorias
+              </strong>
+              <div className="mt-2 mb-4 max-h-full">
+                <Swiper
+                  spaceBetween={16}
+                  slidesPerView={3}
+                  onSlideChange={(swiper) => {
+                    setSliderState({
+                      isBeginning: swiper.isBeginning,
+                      isEnd: swiper.isEnd,
+                    });
+                  }}
+                  centeredSlides
+                >
+                  <MenuSliderNavigation
+                    isBeginning={sliderState.isBeginning}
+                    isEnd={sliderState.isEnd}
+                  />
+                  {filterOptions.map((item, index) => (
+                    <SwiperSlide key={index}>
+                      {({ isActive }) => (
+                        <SliderOptions
+                          category={item}
+                          isActive={isActive}
+                          index={index}
+                        />
+                      )}
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+              {isLoading && (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <Spinner className="h-40 w-40" />
+                </div>
               )}
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-      <div className="max-h-full overflow-y-auto">
-        <CardMenu />
-      </div>
+              {!isLoading && (
+                <div className="h-full overflow-y-auto">
+                  {items[0]!.map((item, index) => (
+                    <CardMenu key={index} item={item} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 }

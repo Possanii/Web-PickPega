@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { usersServices } from "../services/usersServices";
+import { usersServices } from "../services/usersService";
 
 export function useUser() {
   const { data, isFetching } = useQuery({
