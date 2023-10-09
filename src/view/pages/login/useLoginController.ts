@@ -49,7 +49,6 @@ export function useLoginController() {
       singin(response.payload!.accessToken);
     } else {
       toast.error(response.message);
-      console.log(response);
     }
   });
 

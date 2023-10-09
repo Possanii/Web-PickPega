@@ -11,7 +11,7 @@ export function HeaderMenu() {
   } = useHeaderMenuController();
 
   return (
-    <header>
+    <>
       <div className="flex flex-col gap-10">
         <h1 className="text-5xl font-semibold">Cardápio</h1>
         <p className="text-base">
@@ -35,6 +35,6 @@ export function HeaderMenu() {
           oi
         </Modal>
       </div>
-    </header>
+    </>
   );
 }

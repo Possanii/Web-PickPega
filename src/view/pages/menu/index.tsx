@@ -5,9 +5,11 @@ import { MenuProvider } from "./components/MenuContext";
 export function MenuItems() {
   return (
     <MenuProvider>
-      <div className="w-full h-full">
-        <HeaderMenu />
-        <ItemsListMenu />
+      <div className="h-full w-full">
+        <div className="h-full w-full flex flex-col">
+          <HeaderMenu />
+          <ItemsListMenu />
+        </div>
       </div>
     </MenuProvider>
   );

@@ -12,11 +12,11 @@ export function ItemsListMenu() {
   const { sliderState, setSliderState } = useMenuController();
 
   return (
-    <div className="w-full mt-10">
+    <>
       <strong className="text-light-yellow text-lg font-bold">
         Categorias
       </strong>
-      <div className="mt-2 mb-4">
+      <div className="mt-2 mb-4 max-h-full">
         <Swiper
           spaceBetween={16}
           slidesPerView={3}
@@ -45,7 +45,9 @@ export function ItemsListMenu() {
           ))}
         </Swiper>
       </div>
-      <CardMenu />
-    </div>
+      <div className="max-h-full overflow-y-auto">
+        <CardMenu />
+      </div>
+    </>
   );
 }

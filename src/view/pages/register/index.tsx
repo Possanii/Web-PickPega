@@ -10,9 +10,11 @@ import { CATEGORIES } from "../../../app/constants/categories";
 import { UF } from "../../../app/constants/uf";
 import { searchAddressByZip } from "../../../app/services/locationService/searchAddressByZip";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export function Register() {
   const [ufValue, setUfValue] = useState();
+  const [loading, setLoading] = useState(false);
   const { handleSubmit, register, errors, getValues, setValue, isLoading } =
     useRegisterController();
   return (
@@ -79,17 +81,23 @@ export function Register() {
                 onSearchClick={async () => {
                   const zip = getValues("address.zip");
                   if (zip.toString().length === 8) {
+                    setLoading(true);
                     const result = await searchAddressByZip(zip);
+                    setLoading(false);
                     if (result.payload) {
-                      setValue("address.street", result.payload.street);
+                      setValue("address.street", result.payload!.street);
+                      setValue(
+                        "address.neighborhood",
+                        result.payload!.neighborhood
+                      );
+                      setValue("address.city", result.payload!.city);
+                      setValue("address.uf", result.payload!.uf);
+                      setUfValue(result.payload!.uf);
+                    } else {
+                      toast.error("Cep não encontrado");
                     }
-                    setValue(
-                      "address.neighborhood",
-                      result.payload.neighborhood
-                    );
-                    setValue("address.city", result.payload.city);
-                    setValue("address.uf", result.payload.uf);
-                    setUfValue(result.payload.uf);
+                  } else {
+                    toast.error("Insira um cep válido");
                   }
                 }}
                 error={errors.address?.zip?.message}
@@ -99,12 +107,14 @@ export function Register() {
               <Input
                 placeholder="Logadouro"
                 error={errors.address?.street?.message}
+                disabled={loading}
                 {...register("address.street")}
               />
 
               <Input
                 placeholder="Bairro"
                 error={errors.address?.neighborhood?.message}
+                disabled={loading}
                 {...register("address.neighborhood")}
               />
             </div>
@@ -113,12 +123,14 @@ export function Register() {
               <Input
                 placeholder="Numero"
                 error={errors.address?.number?.message}
+                disabled={loading}
                 {...register("address.number", { valueAsNumber: true })}
               />
 
               <Input
                 placeholder="Cidade"
                 error={errors.address?.city?.message}
+                disabled={loading}
                 {...register("address.city")}
               />
 
@@ -126,6 +138,7 @@ export function Register() {
                 placeholder="UF"
                 value={ufValue}
                 error={errors.address?.uf?.message}
+                disabled={loading}
                 {...register("address.uf")}
               >
                 {UF.map((uf, index) => {

@@ -191,7 +191,7 @@ const Sidebar: FC<SidebarProps> = ({ setExpand }) => {
             ? "bg-light-yellow w-72"
             : isExpandOnHover
             ? "bg-light-yellow/70 w-72 backdrop-blur-md"
-            : "bg-light-yellow w-20"
+            : "bg-light-yellow w-0 md:w-20"
         }`,
       ].join(" ")}
     >
