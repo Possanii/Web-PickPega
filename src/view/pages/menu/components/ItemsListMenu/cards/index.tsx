@@ -12,16 +12,16 @@ interface CardMenuProps {
     categoria: string;
     nome: string;
     active: boolean;
-    estauranteid: string;
+    restauranteid: string;
   };
 }
 
 export function CardMenu({ item }: CardMenuProps) {
   return (
     <Card.Root>
-      <div className="w-full h-[160px] bg-gray-200 flex gap-10 items-center justify-center">
-        <div className="md:w-1/5 w-2/5">
-          <img className=" aspect-auto h-24 ml-10" src={item.foto} />
+      <div className="w-full h-[160px] bg-gray-200 flex gap-10 items-center justify-center px-4">
+        <div className="flex justify-center md:w-1/5 w-2/5">
+          <img className=" aspect-video " src={item.foto} />
         </div>
         <div className="flex flex-col gap-4 w-3/5 md:w-full">
           <span className="overflow-x-hidden overflow-y-hidden font-semibold">

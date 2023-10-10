@@ -10,7 +10,7 @@ interface responseProps {
       categoria: string;
       nome: string;
       active: boolean;
-      estauranteid: string;
+      restauranteid: string;
     }
   ];
 }

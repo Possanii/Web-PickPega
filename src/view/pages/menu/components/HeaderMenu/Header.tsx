@@ -1,14 +1,10 @@
 import { Button } from "../../../../../components/Button";
-import { Modal } from "../../../../../components/Modal";
 import { Separator } from "../../../../../components/Separator";
+import { NewProductModal } from "../Modals/NewProductModal";
 import { useHeaderMenuController } from "./useHeaderController";
 
 export function HeaderMenu() {
-  const {
-    isNewItemMenuModalOpen,
-    openNewItemMenuModal,
-    closeNewItemMenuModal,
-  } = useHeaderMenuController();
+  const { openNewItemMenuModal } = useHeaderMenuController();
 
   return (
     <>
@@ -27,14 +23,8 @@ export function HeaderMenu() {
             onClick={openNewItemMenuModal}
           />
         </div>
-        <Modal
-          open={isNewItemMenuModalOpen}
-          title="Modal"
-          onClose={closeNewItemMenuModal}
-        >
-          oi
-        </Modal>
       </div>
+      <NewProductModal />
     </>
   );
 }

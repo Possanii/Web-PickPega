@@ -15,7 +15,7 @@ function CardRoot({ children, className }: CardRootProps) {
   return (
     <div
       className={cn(
-        "relative w-full flex flex-col bg-white rounded-lg box-border shadow-xl",
+        "relative w-full bg-white rounded-lg box-border shadow-xl",
         className
       )}
     >
