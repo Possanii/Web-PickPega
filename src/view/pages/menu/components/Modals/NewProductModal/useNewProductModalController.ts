@@ -3,7 +3,7 @@ import { CATEGORIES } from "../../../../../../app/constants/categories";
 import { useMenu } from "../../MenuContext/useMenu";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { storageService } from "../../../../../../app/services/storageService";
 import { itemsService } from "../../../../../../app/services/itemsService";
 import { useUser } from "../../../../../../app/hooks/useUser";
@@ -16,6 +16,8 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/png",
   "image/webp",
 ];
+
+const ACTIVE = ["true", "false"] as const;
 
 export function useNewProductModalController() {
   const registerProductSchema = z.object({
@@ -68,26 +70,18 @@ export function useNewProductModalController() {
         },
       })
       .positive("Insira um preço válido"),
-    active: z
-      .enum(["true", "false"], {
-        errorMap: (issue) => {
-          switch (issue.code) {
-            case "invalid_type":
-              return { message: "Selecione uma opção válida." };
-            case "invalid_enum_value":
-              return { message: "Selecione uma opção válida." };
-            default:
-              return { message: "Selecione uma opção" };
-          }
-        },
-      })
-      .refine((value) => {
-        if (value === "true") {
-          return true;
-        } else {
-          return false;
+    active: z.enum(ACTIVE, {
+      errorMap: (issue) => {
+        switch (issue.code) {
+          case "invalid_type":
+            return { message: "Selecione uma opção válida." };
+          case "invalid_enum_value":
+            return { message: "Selecione uma opção válida." };
+          default:
+            return { message: "Selecione uma opção" };
         }
-      }),
+      },
+    }),
   });
 
   type FormData = z.infer<typeof registerProductSchema>;
@@ -96,10 +90,13 @@ export function useNewProductModalController() {
 
   const { user } = useUser();
 
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit: hookFormHandleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(registerProductSchema),
   });
@@ -138,8 +135,10 @@ export function useNewProductModalController() {
     const response = await mutateAsync(data);
 
     if (response.status === 200) {
+      queryClient.invalidateQueries({ queryKey: ["items"] });
       toast.success(response.message);
       closeNewItemMenuModal();
+      reset();
     } else {
       toast.error(response.message);
     }

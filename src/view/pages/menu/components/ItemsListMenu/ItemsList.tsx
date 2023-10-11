@@ -21,10 +21,10 @@ export function ItemsListMenu() {
     filterOptions,
   } = useMenuController();
 
-  const hasItems = items.length > 0 && items[0]?.length !== 0;
+  const hasItems = items.length > 0;
 
   return (
-    <>
+    <div>
       {isInitialLoading && (
         <div className="flex flex-col items-center justify-center h-full">
           <Spinner className="h-40 w-40" />
@@ -32,7 +32,7 @@ export function ItemsListMenu() {
       )}
 
       {!isInitialLoading && (
-        <>
+        <div>
           {!hasItems && (
             <div className="h-full flex flex-col justify-center items-center">
               <img src={emptyStateImage} className="h-40 w-40" />
@@ -45,11 +45,11 @@ export function ItemsListMenu() {
             </div>
           )}
           {hasItems && (
-            <div>
+            <div className="flex flex-col">
               <strong className="text-light-yellow text-lg font-bold">
                 Categorias
               </strong>
-              <div className="mt-2 mb-4 max-h-full">
+              <div className="mt-2 mb-4">
                 <Swiper
                   spaceBetween={16}
                   slidesPerView={3}
@@ -84,16 +84,16 @@ export function ItemsListMenu() {
                 </div>
               )}
               {!isLoading && (
-                <div className="h-full overflow-y-auto">
-                  {items[0]!.map((item, index) => (
+                <div className="flex flex-col overflow-y-auto">
+                  {items.map((item, index) => (
                     <CardMenu key={index} item={item} />
                   ))}
                 </div>
               )}
             </div>
           )}
-        </>
+        </div>
       )}
-    </>
+    </div>
   );
 }

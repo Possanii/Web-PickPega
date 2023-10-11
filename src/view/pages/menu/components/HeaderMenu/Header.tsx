@@ -1,6 +1,5 @@
 import { Button } from "../../../../../components/Button";
 import { Separator } from "../../../../../components/Separator";
-import { NewProductModal } from "../Modals/NewProductModal";
 import { useHeaderMenuController } from "./useHeaderController";
 
 export function HeaderMenu() {
@@ -8,13 +7,11 @@ export function HeaderMenu() {
 
   return (
     <>
-      <div className="flex flex-col gap-10">
-        <h1 className="text-5xl font-semibold">Cardápio</h1>
-        <p className="text-base">
-          Seu cardápio é sua vitrine de produtos no pick pega.
-        </p>
-        <Separator />
-      </div>
+      <h1 className="text-5xl font-semibold">Cardápio</h1>
+      <p className="text-base">
+        Seu cardápio é sua vitrine de produtos no pick pega.
+      </p>
+      <Separator />
       <div className="flex">
         <div className="flex w-full justify-end items-center">
           <Button
@@ -24,7 +21,6 @@ export function HeaderMenu() {
           />
         </div>
       </div>
-      <NewProductModal />
     </>
   );
 }

@@ -28,7 +28,7 @@ export function useMenuController() {
   return {
     sliderState,
     setSliderState,
-    items: [data],
+    items: data ?? [],
     filterOptions: Array.from(optionsItems),
     openNewItemMenuModal,
     isInitialLoading,
