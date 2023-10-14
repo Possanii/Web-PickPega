@@ -1,25 +1,20 @@
+import { Item } from "../../../../../../app/interface/Item";
 import { cn } from "../../../../../../app/utils/cn";
 import { formatCurrency } from "../../../../../../app/utils/formatCurrency";
 import { Card } from "../../../../../../components/Card";
 import { Separator } from "../../../../../../components/Separator";
+import { useMenu } from "../../MenuContext/useMenu";
 
-interface CardMenuProps {
-  item: {
-    tempopreparo: number;
-    foto: string;
-    valor: number;
-    description: string;
-    categoria: string;
-    nome: string;
-    active: boolean;
-    restauranteid: string;
-  };
-}
+export function CardMenu({ item }: { item: Item }) {
+  const { openEditItemMenuModal } = useMenu();
 
-export function CardMenu({ item }: CardMenuProps) {
   return (
     <Card.Root>
-      <div className="w-full h-[160px] bg-gray-200 flex gap-10 items-center justify-center px-4">
+      <div
+        className="w-full h-[160px] bg-gray-200 flex gap-10 items-center justify-center px-4"
+        role="button"
+        onClick={() => openEditItemMenuModal(item)}
+      >
         <div className="flex justify-center md:w-1/5 w-2/5">
           <img className=" aspect-video " src={item.foto} />
         </div>

@@ -1,18 +1,8 @@
 import { instance } from "../../api/FirebaseConfig";
+import { Item } from "../../interface/Item";
 import cResponse from "../../interface/cResponse";
 
-interface newItemProps {
-  tempopreparo: number;
-  foto: string;
-  valor: number;
-  description: string;
-  categoria: string;
-  nome: string;
-  active: boolean;
-  restauranteid: string;
-}
-
-export async function createNewItem(data: newItemProps) {
+export async function createNewItem(data: Item) {
   const response: cResponse = {
     status: 500,
     message: "Algo deu errado ao criar novo item",

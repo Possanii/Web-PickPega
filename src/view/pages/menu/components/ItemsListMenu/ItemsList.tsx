@@ -84,7 +84,7 @@ export function ItemsListMenu() {
                 </div>
               )}
               {!isLoading && (
-                <div className="flex flex-col overflow-y-auto">
+                <div className="flex flex-col max-h-[640px] overflow-y-auto">
                   {items.map((item, index) => (
                     <CardMenu key={index} item={item} />
                   ))}

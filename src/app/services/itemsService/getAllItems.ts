@@ -1,18 +1,8 @@
 import { instance } from "../../api/FirebaseConfig";
+import { Item } from "../../interface/Item";
 
 interface responseProps {
-  payload: [
-    {
-      tempopreparo: number;
-      foto: string;
-      valor: number;
-      description: string;
-      categoria: string;
-      nome: string;
-      active: boolean;
-      restauranteid: string;
-    }
-  ];
+  payload: Array<Item>;
 }
 
 export async function getAllItems(uid: string) {
