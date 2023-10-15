@@ -8,6 +8,7 @@ import { storageService } from "../../../../../../app/services/storageService";
 import { itemsService } from "../../../../../../app/services/itemsService";
 import { useUser } from "../../../../../../app/hooks/useUser";
 import toast from "react-hot-toast";
+import { currencyStringToNumber } from "../../../../../../app/utils/currencyStringToNumber";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -58,18 +59,7 @@ export function useNewProductModalController() {
         },
       })
       .positive("Insira um tempo válido"),
-    price: z
-      .number({
-        errorMap: (issue) => {
-          switch (issue.code) {
-            case "invalid_type":
-              return { message: "Insira somente números." };
-            default:
-              return { message: "Insira um preço" };
-          }
-        },
-      })
-      .positive("Insira um preço válido"),
+    price: z.union([z.string().nonempty("Informe o valor"), z.number()]),
     active: z.enum(ACTIVE, {
       errorMap: (issue) => {
         switch (issue.code) {
@@ -97,6 +87,7 @@ export function useNewProductModalController() {
     handleSubmit: hookFormHandleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<FormData>({
     resolver: zodResolver(registerProductSchema),
   });
@@ -105,7 +96,7 @@ export function useNewProductModalController() {
     mutationFn: async (data: FormData) => {
       const photo = await storageService.uploadToStorage(
         data.photo[0],
-        "/FotosRestaurantes"
+        "/FotosItems"
       );
 
       if (photo.status !== 200) {
@@ -119,8 +110,8 @@ export function useNewProductModalController() {
           description: data.description,
           categoria: data.category,
           tempopreparo: data.timer,
-          valor: data.price,
-          active: Boolean(data.active),
+          valor: currencyStringToNumber(data.price),
+          active: data.active === "true" ? true : false,
           restauranteid: user!.uid,
         });
         return result;
@@ -151,5 +142,6 @@ export function useNewProductModalController() {
     handleSubmit,
     errors,
     isLoading,
+    control,
   };
 }

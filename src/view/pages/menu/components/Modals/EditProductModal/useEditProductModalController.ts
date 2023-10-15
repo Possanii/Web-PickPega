@@ -8,6 +8,7 @@ import { storageService } from "../../../../../../app/services/storageService";
 import { itemsService } from "../../../../../../app/services/itemsService";
 import { useUser } from "../../../../../../app/hooks/useUser";
 import toast from "react-hot-toast";
+import { currencyStringToNumber } from "../../../../../../app/utils/currencyStringToNumber";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -23,13 +24,14 @@ export function useEditProductModalController() {
   const registerProductSchema = z.object({
     photo: z
       .custom<FileList>()
-      .refine((files) => files?.length === 1, "Insira uma imagem.")
+      .optional()
       .refine(
-        (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+        (files) => files?.[0]?.size ?? 0 <= MAX_FILE_SIZE,
         `Tamanho máximo da imagem é de 5MB.`
       )
       .refine(
-        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+        (files) =>
+          ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type ?? "image/png"),
         "Selecione uma imagem tipo .jpg, .jpeg, .png ou .webp."
       ),
     name: z.string().nonempty(),
@@ -61,18 +63,7 @@ export function useEditProductModalController() {
         },
       })
       .positive("Insira um tempo válido"),
-    price: z
-      .number({
-        errorMap: (issue) => {
-          switch (issue.code) {
-            case "invalid_type":
-              return { message: "Insira somente números." };
-            default:
-              return { message: "Insira um preço" };
-          }
-        },
-      })
-      .positive("Insira um preço válido"),
+    price: z.union([z.string().nonempty("Informe o valor"), z.number()]),
     active: z.union([
       z.enum(ACTIVE, {
         errorMap: (issue) => {
@@ -104,6 +95,7 @@ export function useEditProductModalController() {
     handleSubmit: hookFormHandleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<FormData>({
     resolver: zodResolver(registerProductSchema),
     defaultValues: {
@@ -118,37 +110,59 @@ export function useEditProductModalController() {
 
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: async (data: FormData) => {
-      const photo = await storageService.uploadToStorage(
-        data.photo[0],
-        "/FotosRestaurantes"
-      );
+      if (data.photo!.length !== 0) {
+        const photo = await storageService.uploadToStorage(
+          data.photo![0],
+          "/FotosItems"
+        );
+        if (photo.status !== 200) {
+          return photo;
+        }
 
-      if (photo.status !== 200) {
-        return photo;
-      }
+        try {
+          const result = await itemsService.EditItem({
+            uid: itemBeingEdited!.uid,
+            foto: photo.payload!.url,
+            nome: data.name,
+            description: data.description,
+            categoria: data.category,
+            tempopreparo: data.timer,
+            valor: currencyStringToNumber(itemBeingEdited!.valor),
+            active: data.active === "true" ? true : false,
+            restauranteid: user!.uid,
+          });
 
-      try {
-        const result = await itemsService.createNewItem({
-          foto: photo.payload!.url,
-          nome: data.name,
-          description: data.description,
-          categoria: data.category,
-          tempopreparo: data.timer,
-          valor: data.price,
-          active: Boolean(data.active),
-          restauranteid: user!.uid,
-        });
-        return result;
-      } catch (error) {
-        await storageService.deleteFromStorage(photo.payload!.url);
-        return { status: 500, message: "Falha ao criar restaurante" };
+          await storageService.deleteFromStorage(
+            itemBeingEdited!.foto as string
+          );
+
+          return result;
+        } catch (error) {
+          await storageService.deleteFromStorage(photo.payload!.url);
+          return { status: 500, message: "Falha ao atualizar restaurante" };
+        }
+      } else {
+        try {
+          const result = await itemsService.EditItem({
+            uid: itemBeingEdited!.uid,
+            nome: data.name,
+            description: data.description,
+            categoria: data.category,
+            tempopreparo: data.timer,
+            valor: currencyStringToNumber(itemBeingEdited!.valor),
+            active: data.active === "true" ? true : false,
+            restauranteid: user!.uid,
+          });
+          return result;
+        } catch (error) {
+          return { status: 500, message: "Falha ao atualizar restaurante" };
+        }
       }
     },
   });
 
   const handleSubmit = hookFormHandleSubmit(async (data) => {
     const response = await mutateAsync(data);
-
     if (response.status === 200) {
       queryClient.invalidateQueries({ queryKey: ["items"] });
       toast.success(response.message);
@@ -167,5 +181,6 @@ export function useEditProductModalController() {
     errors,
     isLoading,
     itemBeingEdited,
+    control,
   };
 }

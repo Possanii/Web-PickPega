@@ -1,9 +1,12 @@
+import { Controller } from "react-hook-form";
 import { CATEGORIES } from "../../../../../../app/constants/categories";
 import { Button } from "../../../../../../components/Button";
 import { Input } from "../../../../../../components/Input";
 import { Modal } from "../../../../../../components/Modal";
 import { Select, SelectItem } from "../../../../../../components/Select";
 import { useEditProductModalController } from "./useEditProductModalController";
+import { InputHours } from "../../../../../../components/InputHours";
+import { InputCurrency } from "../../../../../../components/InputCurrency";
 
 export function EditProductModal() {
   const {
@@ -13,7 +16,7 @@ export function EditProductModal() {
     errors,
     handleSubmit,
     isLoading,
-    itemBeingEdited,
+    control,
   } = useEditProductModalController();
 
   return (
@@ -40,42 +43,74 @@ export function EditProductModal() {
           error={errors.description?.message}
           {...register("description")}
         />
-        <Select
-          placeholder="Categorias"
-          {...register("category")}
-          value={itemBeingEdited?.categoria}
-          error={errors.category?.message}
-        >
-          {CATEGORIES.map((category, index) => {
-            return (
-              <SelectItem key={index} value={category}>
-                {category}
-              </SelectItem>
-            );
-          })}
-        </Select>
-        <Input
-          placeholder="Tempo de preparo"
-          error={errors.timer?.message}
-          {...register("timer", { valueAsNumber: true })}
+
+        <Controller
+          control={control}
+          name="category"
+          render={({ field: { onChange, value } }) => (
+            <Select
+              placeholder="Categorias"
+              name="Categorias"
+              onChange={onChange}
+              value={value}
+              error={errors.category?.message}
+            >
+              {CATEGORIES.map((category, index) => {
+                return (
+                  <SelectItem key={index} value={category}>
+                    {category}
+                  </SelectItem>
+                );
+              })}
+            </Select>
+          )}
         />
-        <Input
-          placeholder="Valor"
-          error={errors.price?.message}
-          {...register("price", { valueAsNumber: true })}
+
+        <Controller
+          control={control}
+          name="timer"
+          render={({ field: { onChange, value } }) => (
+            <InputHours
+              placeholder="Tempo de preparo"
+              error={errors.timer?.message}
+              onChange={onChange}
+              value={value}
+            />
+          )}
         />
+
+        <Controller
+          control={control}
+          name="price"
+          render={({ field: { onChange, value } }) => (
+            <InputCurrency
+              placeholder="Valor"
+              onChange={onChange}
+              value={value}
+              error={errors.price?.message}
+            />
+          )}
+        />
+
         <div className="relative">
-          <Select
-            placeholder="Ativo"
-            error={errors.active?.message}
-            value={itemBeingEdited?.active.toString()}
-            {...register("active")}
-          >
-            <SelectItem value="true">ATIVO</SelectItem>
-            <SelectItem value="false">INATIVO</SelectItem>
-          </Select>
+          <Controller
+            control={control}
+            name="active"
+            render={({ field: { onChange, value } }) => (
+              <Select
+                placeholder="Ativo"
+                name="active"
+                onChange={onChange}
+                value={value.toString()}
+                error={errors.active?.message}
+              >
+                <SelectItem value="true">ATIVO</SelectItem>
+                <SelectItem value="false">INATIVO</SelectItem>
+              </Select>
+            )}
+          />
         </div>
-        <Button text="Criar produto" type="submit" isLoading={isLoading} />
+        <Button text="Atualizar produto" type="submit" isLoading={isLoading} />
       </form>
     </Modal>
   );

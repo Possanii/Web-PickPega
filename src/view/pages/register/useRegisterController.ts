@@ -102,6 +102,7 @@ export function useRegisterController() {
     formState: { errors },
     getValues,
     setValue,
+    control,
   } = useForm<FormData>({
     resolver: zodResolver(registerSchema),
   });
@@ -165,5 +166,13 @@ export function useRegisterController() {
     }
   });
 
-  return { handleSubmit, register, errors, getValues, setValue, isLoading };
+  return {
+    handleSubmit,
+    register,
+    errors,
+    getValues,
+    setValue,
+    isLoading,
+    control,
+  };
 }

@@ -11,12 +11,19 @@ import { UF } from "../../../app/constants/uf";
 import { searchAddressByZip } from "../../../app/services/locationService/searchAddressByZip";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Controller } from "react-hook-form";
 
 export function Register() {
-  const [ufValue, setUfValue] = useState();
   const [loading, setLoading] = useState(false);
-  const { handleSubmit, register, errors, getValues, setValue, isLoading } =
-    useRegisterController();
+  const {
+    handleSubmit,
+    register,
+    errors,
+    getValues,
+    setValue,
+    isLoading,
+    control,
+  } = useRegisterController();
   return (
     <>
       <img src={background} className="absolute h-full w-full object-cover" />
@@ -57,19 +64,27 @@ export function Register() {
                 {...register("name")}
               />
 
-              <Select
-                placeholder="Categorias"
-                {...register("category")}
-                error={errors.category?.message}
-              >
-                {CATEGORIES.map((category, index) => {
-                  return (
-                    <SelectItem key={index} value={category}>
-                      {category}
-                    </SelectItem>
-                  );
-                })}
-              </Select>
+              <Controller
+                control={control}
+                name="category"
+                render={({ field: { onChange, value } }) => (
+                  <Select
+                    placeholder="Categorias"
+                    name="Categorias"
+                    onChange={onChange}
+                    value={value}
+                    error={errors.category?.message}
+                  >
+                    {CATEGORIES.map((category, index) => {
+                      return (
+                        <SelectItem key={index} value={category}>
+                          {category}
+                        </SelectItem>
+                      );
+                    })}
+                  </Select>
+                )}
+              />
             </div>
 
             <div className="grid md:grid-cols-[20%_50%_auto] gap-2">
@@ -92,7 +107,6 @@ export function Register() {
                       );
                       setValue("address.city", result.payload!.city);
                       setValue("address.uf", result.payload!.uf);
-                      setUfValue(result.payload!.uf);
                     } else {
                       toast.error("Cep não encontrado");
                     }
@@ -134,21 +148,27 @@ export function Register() {
                 {...register("address.city")}
               />
 
-              <Select
-                placeholder="UF"
-                value={ufValue}
-                error={errors.address?.uf?.message}
-                disabled={loading}
-                {...register("address.uf")}
-              >
-                {UF.map((uf, index) => {
-                  return (
-                    <SelectItem key={index} value={uf}>
-                      {uf}
-                    </SelectItem>
-                  );
-                })}
-              </Select>
+              <Controller
+                control={control}
+                name="address.uf"
+                render={({ field: { onChange, value } }) => (
+                  <Select
+                    placeholder="UF"
+                    name="uf"
+                    onChange={onChange}
+                    value={value}
+                    error={errors.address?.uf?.message}
+                  >
+                    {UF.map((uf, index) => {
+                      return (
+                        <SelectItem key={index} value={uf}>
+                          {uf}
+                        </SelectItem>
+                      );
+                    })}
+                  </Select>
+                )}
+              />
             </div>
 
             <Input

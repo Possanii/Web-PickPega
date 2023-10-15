@@ -8,9 +8,8 @@ import {
   CrossCircledIcon,
 } from "@radix-ui/react-icons";
 import { cn } from "../app/utils/cn";
-import { UseFormRegisterReturn } from "react-hook-form";
 
-interface SelectProps extends UseFormRegisterReturn {
+interface SelectProps {
   children: React.ReactNode;
   /**
    * A string to show when no items are selected
@@ -24,10 +23,10 @@ interface SelectProps extends UseFormRegisterReturn {
    * A string error to display when something went wrong
    */
   error?: string;
-  /**
-   * A input value to display when no items are selected
-   */
+
   value?: string;
+
+  onChange?(value: string): void;
 }
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
@@ -39,8 +38,8 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
       <div className="flex flex-col">
         <RdxSelect.Root
           name={name}
-          onValueChange={(value) => onChange({ target: { name, value } })}
           value={value}
+          onValueChange={(value) => onChange?.(value)}
           {...props}
         >
           <RdxSelect.Trigger

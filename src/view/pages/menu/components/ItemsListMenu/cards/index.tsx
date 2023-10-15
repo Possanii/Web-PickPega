@@ -25,7 +25,7 @@ export function CardMenu({ item }: { item: Item }) {
           <span className="h-12 w-full font-extralight overflow-x-hidden text-ellipsis">
             {item.description}
           </span>
-          <span>{formatCurrency(item.valor)}</span>
+          <span>{formatCurrency(Number(item.valor))}</span>
         </div>
         <div className="md:w-1/5 hidden md:block">
           <div

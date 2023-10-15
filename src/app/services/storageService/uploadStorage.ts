@@ -1,7 +1,11 @@
 import { storage } from "../../api/FirebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
-import cResponse from "../../interface/cResponse";
+interface cResponse {
+  status: number;
+  message: string;
+  payload?: { url: string };
+}
 
 export async function uploadToStorage(image: File, path: string) {
   const response: cResponse = { status: 401, message: "Algo deu errado" };
