@@ -3,7 +3,8 @@ import { Separator } from "../../../../../components/Separator";
 import { useHeaderMenuController } from "./useHeaderController";
 
 export function HeaderMenu() {
-  const { openNewItemMenuModal } = useHeaderMenuController();
+  const { openNewItemMenuModal, openCategoryMenuModal } =
+    useHeaderMenuController();
 
   return (
     <>
@@ -13,7 +14,12 @@ export function HeaderMenu() {
       </p>
       <Separator />
       <div className="flex">
-        <div className="flex w-full justify-end items-center">
+        <div className="flex gap-4 w-full justify-end items-center">
+          <Button
+            text="Categorias"
+            className="w-[160px]"
+            onClick={openCategoryMenuModal}
+          />
           <Button
             text="Novo produto"
             className="w-[160px]"

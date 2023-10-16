@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { CATEGORIES } from "../../../../../../app/constants/categories";
 import { useMenu } from "../../MenuContext/useMenu";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,23 +33,9 @@ export function useEditProductModalController() {
           ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type ?? "image/png"),
         "Selecione uma imagem tipo .jpg, .jpeg, .png ou .webp."
       ),
-    name: z.string().nonempty(),
-    description: z.string().nonempty(),
-    category: z.union([
-      z.enum(CATEGORIES, {
-        errorMap: (issue) => {
-          switch (issue.code) {
-            case "invalid_type":
-              return { message: "Selecione uma opção válida." };
-            case "invalid_enum_value":
-              return { message: "Selecione uma opção válida." };
-            default:
-              return { message: "Selecione uma opção" };
-          }
-        },
-      }),
-      z.string(),
-    ]),
+    name: z.string().nonempty("Insira um nome"),
+    description: z.string().nonempty("Insira uma descrição"),
+    category: z.string().nonempty("Insira uma categoria"),
     timer: z
       .number({
         errorMap: (issue) => {
@@ -121,20 +106,18 @@ export function useEditProductModalController() {
 
         try {
           const result = await itemsService.EditItem({
-            uid: itemBeingEdited!.uid,
+            id: itemBeingEdited!.id,
             foto: photo.payload!.url,
             nome: data.name,
             description: data.description,
             categoria: data.category,
             tempopreparo: data.timer,
-            valor: currencyStringToNumber(itemBeingEdited!.valor),
+            valor: currencyStringToNumber(data.price),
             active: data.active === "true" ? true : false,
             restauranteid: user!.uid,
           });
 
-          await storageService.deleteFromStorage(
-            itemBeingEdited!.foto as string
-          );
+          await storageService.deleteFromStorage(itemBeingEdited!.foto!);
 
           return result;
         } catch (error) {
@@ -144,12 +127,12 @@ export function useEditProductModalController() {
       } else {
         try {
           const result = await itemsService.EditItem({
-            uid: itemBeingEdited!.uid,
+            id: itemBeingEdited!.id,
             nome: data.name,
             description: data.description,
             categoria: data.category,
             tempopreparo: data.timer,
-            valor: currencyStringToNumber(itemBeingEdited!.valor),
+            valor: currencyStringToNumber(data.price),
             active: data.active === "true" ? true : false,
             restauranteid: user!.uid,
           });
@@ -182,5 +165,6 @@ export function useEditProductModalController() {
     isLoading,
     itemBeingEdited,
     control,
+    categories: user?.categories,
   };
 }

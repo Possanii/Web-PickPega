@@ -10,7 +10,7 @@ export function useMenuController() {
     isEnd: false,
   });
 
-  const { openNewItemMenuModal } = useMenu();
+  const { openNewItemMenuModal, openNewCategoryMenuModal } = useMenu();
 
   const { user } = useUser();
 
@@ -29,8 +29,9 @@ export function useMenuController() {
     sliderState,
     setSliderState,
     items: data ?? [],
-    filterOptions: Array.from(optionsItems),
+    filterOptions: user?.categories ?? [],
     openNewItemMenuModal,
+    openNewCategoryMenuModal,
     isInitialLoading,
     isLoading: false,
   };

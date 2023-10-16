@@ -1,5 +1,4 @@
 import { Controller } from "react-hook-form";
-import { CATEGORIES } from "../../../../../../app/constants/categories";
 import { Button } from "../../../../../../components/Button";
 import { Input } from "../../../../../../components/Input";
 import { Modal } from "../../../../../../components/Modal";
@@ -16,6 +15,7 @@ export function NewProductModal() {
     handleSubmit,
     isLoading,
     control,
+    categories,
   } = useNewProductModalController();
 
   return (
@@ -53,7 +53,7 @@ export function NewProductModal() {
               value={value}
               error={errors.category?.message}
             >
-              {CATEGORIES.map((category, index) => {
+              {categories!.map((category, index) => {
                 return (
                   <SelectItem key={index} value={category}>
                     {category}

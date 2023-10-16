@@ -143,5 +143,6 @@ export function useNewProductModalController() {
     errors,
     isLoading,
     control,
+    categories: user?.categories,
   };
 }

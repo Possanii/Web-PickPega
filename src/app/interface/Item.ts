@@ -1,5 +1,5 @@
 export interface Item {
-  uid?: string;
+  id?: string;
   tempopreparo: number;
   foto?: string;
   valor: number | string;

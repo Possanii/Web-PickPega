@@ -18,10 +18,12 @@ export function ItemsListMenu() {
     isInitialLoading,
     isLoading,
     openNewItemMenuModal,
+    openNewCategoryMenuModal,
     filterOptions,
   } = useMenuController();
 
   const hasItems = items.length > 0;
+  const hasCategories = filterOptions.length > 0;
 
   return (
     <div>
@@ -33,6 +35,17 @@ export function ItemsListMenu() {
 
       {!isInitialLoading && (
         <div>
+          {!hasCategories && (
+            <div className="h-full flex flex-col justify-center items-center">
+              <img src={emptyStateImage} className="h-40 w-40" />
+              <span>Nenhuma categoria encontrado.</span>
+              <Button
+                text="Cadastrar categoria"
+                onClick={() => openNewCategoryMenuModal("NEW")}
+                className="w-auto"
+              />
+            </div>
+          )}
           {!hasItems && (
             <div className="h-full flex flex-col justify-center items-center">
               <img src={emptyStateImage} className="h-40 w-40" />
@@ -44,7 +57,7 @@ export function ItemsListMenu() {
               />
             </div>
           )}
-          {hasItems && (
+          {hasItems && hasCategories && (
             <div className="flex flex-col">
               <strong className="text-light-yellow text-lg font-bold">
                 Categorias

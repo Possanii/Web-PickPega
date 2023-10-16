@@ -8,7 +8,7 @@ export async function EditItem(item: Item) {
     message: "Algo deu errado ao editar item",
   };
   await instance
-    .put(`/editItem/${item.uid}`, item)
+    .put(`/editItem/${item.id}`, item)
     .then((result) => {
       if (result.status === 200) {
         response.status = 200;
