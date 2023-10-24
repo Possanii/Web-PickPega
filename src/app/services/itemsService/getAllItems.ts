@@ -7,7 +7,7 @@ interface responseProps {
 
 export async function getAllItems(uid: string) {
   const result = await instance
-    .get<responseProps>(`/getItemsByRestauranteId/${uid}`)
+    .get<responseProps>(`/getRestaurantMenu/${uid}`)
     .then((result) => {
       if (result.status === 200) {
         return result.data.payload;

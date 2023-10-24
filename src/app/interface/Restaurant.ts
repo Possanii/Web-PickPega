@@ -1,5 +1,5 @@
 export interface Restaurant {
-  uid: string;
+  uid?: string;
   name: string;
   email: string;
   category: string;
@@ -12,7 +12,7 @@ export interface Restaurant {
     uf: string;
     zip: number;
   };
-  photo: string;
-  lat: number;
-  lng: number;
+  photo?: string;
+  lat?: number;
+  lng?: number;
 }

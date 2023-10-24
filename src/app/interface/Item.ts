@@ -1,11 +1,11 @@
 export interface Item {
   id?: string;
-  tempopreparo: number;
-  foto?: string;
-  valor: number | string;
+  time: number;
+  picture?: string;
+  price: number | string;
   description: string;
-  categoria: string;
-  nome: string;
+  category: string;
+  name: string;
   active: boolean;
-  restauranteid: string;
+  restaurantId: string;
 }

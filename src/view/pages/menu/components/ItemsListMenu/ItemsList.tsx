@@ -46,7 +46,7 @@ export function ItemsListMenu() {
               />
             </div>
           )}
-          {!hasItems && (
+          {!hasItems && hasCategories && (
             <div className="h-full flex flex-col justify-center items-center">
               <img src={emptyStateImage} className="h-40 w-40" />
               <span>Nenhum item encontrado.</span>

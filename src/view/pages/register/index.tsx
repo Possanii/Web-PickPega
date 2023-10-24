@@ -24,6 +24,7 @@ export function Register() {
     isLoading,
     control,
   } = useRegisterController();
+
   return (
     <>
       <img src={background} className="absolute h-full w-full object-cover" />

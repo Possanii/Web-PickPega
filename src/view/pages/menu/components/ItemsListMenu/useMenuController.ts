@@ -20,11 +20,6 @@ export function useMenuController() {
     staleTime: Infinity,
   });
 
-  const optionsItems = new Set<string>();
-  if (data && data.length > 0) {
-    data.map((item) => optionsItems.add(item.categoria));
-  }
-
   return {
     sliderState,
     setSliderState,

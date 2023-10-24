@@ -84,11 +84,11 @@ export function useEditProductModalController() {
   } = useForm<FormData>({
     resolver: zodResolver(registerProductSchema),
     defaultValues: {
-      name: itemBeingEdited?.nome,
+      name: itemBeingEdited?.name,
       description: itemBeingEdited?.description,
-      category: itemBeingEdited?.categoria,
-      timer: itemBeingEdited?.tempopreparo,
-      price: itemBeingEdited?.valor,
+      category: itemBeingEdited?.category,
+      timer: itemBeingEdited?.time,
+      price: itemBeingEdited?.price,
       active: itemBeingEdited?.active,
     },
   });
@@ -105,19 +105,22 @@ export function useEditProductModalController() {
         }
 
         try {
-          const result = await itemsService.EditItem({
-            id: itemBeingEdited!.id,
-            foto: photo.payload!.url,
-            nome: data.name,
-            description: data.description,
-            categoria: data.category,
-            tempopreparo: data.timer,
-            valor: currencyStringToNumber(data.price),
-            active: data.active === "true" ? true : false,
-            restauranteid: user!.uid,
-          });
+          const result = await itemsService.EditItem(
+            {
+              id: itemBeingEdited!.id,
+              picture: photo.payload!.url,
+              name: data.name,
+              description: data.description,
+              category: data.category,
+              time: data.timer,
+              price: currencyStringToNumber(data.price),
+              active: data.active === "true" ? true : false,
+              restaurantId: user!.uid,
+            },
+            user!.uid
+          );
 
-          await storageService.deleteFromStorage(itemBeingEdited!.foto!);
+          await storageService.deleteFromStorage(itemBeingEdited!.picture!);
 
           return result;
         } catch (error) {
@@ -126,16 +129,19 @@ export function useEditProductModalController() {
         }
       } else {
         try {
-          const result = await itemsService.EditItem({
-            id: itemBeingEdited!.id,
-            nome: data.name,
-            description: data.description,
-            categoria: data.category,
-            tempopreparo: data.timer,
-            valor: currencyStringToNumber(data.price),
-            active: data.active === "true" ? true : false,
-            restauranteid: user!.uid,
-          });
+          const result = await itemsService.EditItem(
+            {
+              id: itemBeingEdited!.id,
+              name: data.name,
+              description: data.description,
+              category: data.category,
+              time: data.timer,
+              price: currencyStringToNumber(data.price),
+              active: data.active === "true" ? true : false,
+              restaurantId: user!.uid,
+            },
+            user!.uid
+          );
           return result;
         } catch (error) {
           return { status: 500, message: "Falha ao atualizar restaurante" };

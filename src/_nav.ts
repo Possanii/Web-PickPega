@@ -11,19 +11,11 @@ const nav = [
   },
   {
     id: "profile",
-    title: "Profile",
+    title: "Meu Perfil",
     name: "Profile",
     parent: true,
     icon: PersonIcon,
-    child: [
-      {
-        id: "My profile",
-        title: "My profile",
-        name: "My profile",
-        link: "/profile/my-profile",
-        icon: "dot",
-      },
-    ],
+    link: "/profile",
   },
   {
     id: "menu",

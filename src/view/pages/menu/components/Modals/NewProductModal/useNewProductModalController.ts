@@ -104,16 +104,19 @@ export function useNewProductModalController() {
       }
 
       try {
-        const result = await itemsService.createNewItem({
-          foto: photo.payload!.url,
-          nome: data.name,
-          description: data.description,
-          categoria: data.category,
-          tempopreparo: data.timer,
-          valor: currencyStringToNumber(data.price),
-          active: data.active === "true" ? true : false,
-          restauranteid: user!.uid,
-        });
+        const result = await itemsService.createNewItem(
+          {
+            picture: photo.payload!.url,
+            name: data.name,
+            description: data.description,
+            category: data.category,
+            time: data.timer,
+            price: currencyStringToNumber(data.price),
+            active: data.active === "true" ? true : false,
+            restaurantId: user!.uid,
+          },
+          user!.uid
+        );
         return result;
       } catch (error) {
         await storageService.deleteFromStorage(photo.payload!.url);
@@ -143,6 +146,6 @@ export function useNewProductModalController() {
     errors,
     isLoading,
     control,
-    categories: user?.categories,
+    categories: user?.categories ?? [],
   };
 }

@@ -1,10 +1,43 @@
-import cResponse from "../../interface/cResponse";
+interface IAddressResponse {
+  status: number;
+  message: string;
+  payload: {
+    street: string;
+    neighborhood: string;
+    city: string;
+    uf:
+      | "AC"
+      | "AL"
+      | "AP"
+      | "AM"
+      | "BA"
+      | "CE"
+      | "DF"
+      | "ES"
+      | "GO"
+      | "MA"
+      | "MT"
+      | "MS"
+      | "MG"
+      | "PA"
+      | "PB"
+      | "PR"
+      | "PE"
+      | "PI"
+      | "RJ"
+      | "RN"
+      | "RS"
+      | "RO"
+      | "RR"
+      | "SC"
+      | "SE"
+      | "SP"
+      | "TO";
+  };
+}
 
 export async function searchAddressByZip(zip: number) {
-  const response: cResponse = {
-    status: 400,
-    message: "Algo deu errado",
-  };
+  const response = {} as IAddressResponse;
   const apiUrl = `https://viacep.com.br/ws/${zip}/json/`;
   const result = await fetch(apiUrl);
   const data = await result.json();

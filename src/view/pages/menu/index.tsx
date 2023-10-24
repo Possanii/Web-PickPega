@@ -6,7 +6,7 @@ import { NewCategoryModal } from "./components/Modals/CategoriesModal/newCategor
 import { EditProductModal } from "./components/Modals/EditProductModal";
 import { NewProductModal } from "./components/Modals/NewProductModal";
 
-export function MenuItems() {
+export function MenuItemsPage() {
   return (
     <MenuProvider>
       <MenuContext.Consumer>

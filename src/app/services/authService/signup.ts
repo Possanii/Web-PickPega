@@ -25,7 +25,7 @@ export async function signup(data: SignupProps) {
     message: "Algo deu errado ao criar restaurante",
   };
   await instance
-    .post("/addNewRestaurante", data)
+    .post("/addNewRestaurant", data)
     .then((result) => {
       response.status = 200;
       response.message = "Restaurante criado com sucesso";
