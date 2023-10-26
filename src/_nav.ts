@@ -1,18 +1,23 @@
-import { DashboardIcon, Pencil2Icon, PersonIcon } from "@radix-ui/react-icons";
+import {
+  DashboardIcon,
+  FileTextIcon,
+  Pencil2Icon,
+  PersonIcon,
+} from "@radix-ui/react-icons";
 
 const nav = [
   {
     id: "dashboard",
     title: "Dashboard",
-    name: "Dashboard",
+    name: "dashboard",
     parent: true,
     icon: DashboardIcon,
-    link: "/dashboard",
+    link: "/",
   },
   {
     id: "profile",
     title: "Meu Perfil",
-    name: "Profile",
+    name: "profile",
     parent: true,
     icon: PersonIcon,
     link: "/profile",
@@ -20,10 +25,18 @@ const nav = [
   {
     id: "menu",
     title: "Cardápio",
-    name: "Menu",
+    name: "menu",
     parent: true,
     icon: Pencil2Icon,
     link: "/menu",
+  },
+  {
+    id: "board",
+    title: "Pedidos",
+    name: "board",
+    parent: true,
+    icon: FileTextIcon,
+    link: "/board",
   },
 ];
 

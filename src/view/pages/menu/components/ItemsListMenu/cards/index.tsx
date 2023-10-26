@@ -16,16 +16,16 @@ export function CardMenu({ item }: { item: Item }) {
         onClick={() => openEditItemMenuModal(item)}
       >
         <div className="flex justify-center md:w-1/5 w-2/5">
-          <img className=" aspect-video " src={item.foto} />
+          <img className=" aspect-video " src={item.picture} />
         </div>
         <div className="flex flex-col gap-4 w-3/5 md:w-full">
           <span className="overflow-x-hidden overflow-y-hidden font-semibold">
-            {item.nome}
+            {item.name}
           </span>
           <span className="h-12 w-full font-extralight overflow-x-hidden text-ellipsis">
             {item.description}
           </span>
-          <span>{formatCurrency(Number(item.valor))}</span>
+          <span>{formatCurrency(Number(item.price))}</span>
         </div>
         <div className="md:w-1/5 hidden md:block">
           <div

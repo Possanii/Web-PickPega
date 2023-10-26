@@ -9,6 +9,7 @@ import { Spinner } from "../../../../../components/Spinner";
 
 // Import Swiper styles
 import "swiper/css";
+import { Item } from "../../../../../app/interface/Item";
 
 export function ItemsListMenu() {
   const {
@@ -98,9 +99,11 @@ export function ItemsListMenu() {
               )}
               {!isLoading && (
                 <div className="flex flex-col max-h-[640px] overflow-y-auto">
-                  {items.map((item, index) => (
-                    <CardMenu key={index} item={item} />
-                  ))}
+                  {items.map((category: [string, Record<string, Item[]>]) =>
+                    category[1].map((item: Item) => (
+                      <CardMenu key={item.name} item={item} />
+                    ))
+                  )}
                 </div>
               )}
             </div>

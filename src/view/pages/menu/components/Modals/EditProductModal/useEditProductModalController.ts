@@ -47,7 +47,7 @@ export function useEditProductModalController() {
           }
         },
       })
-      .positive("Insira um tempo válido"),
+      .min(0, "Insira um tempo válido"),
     price: z.union([z.string().nonempty("Informe o valor"), z.number()]),
     active: z.union([
       z.enum(ACTIVE, {
@@ -117,7 +117,7 @@ export function useEditProductModalController() {
               active: data.active === "true" ? true : false,
               restaurantId: user!.uid,
             },
-            user!.uid
+            itemBeingEdited!.id!
           );
 
           await storageService.deleteFromStorage(itemBeingEdited!.picture!);
@@ -171,6 +171,5 @@ export function useEditProductModalController() {
     isLoading,
     itemBeingEdited,
     control,
-    categories: user?.categories,
   };
 }

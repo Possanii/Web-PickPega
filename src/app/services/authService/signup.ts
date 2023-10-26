@@ -1,5 +1,12 @@
 import { instance } from "../../api/FirebaseConfig";
-import cResponse from "../../interface/cResponse";
+
+interface SignupResponse {
+  status: number;
+  message: string;
+  payload: {
+    accessToken: string;
+  };
+}
 
 interface SignupProps {
   name: string;
@@ -20,10 +27,7 @@ interface SignupProps {
 }
 
 export async function signup(data: SignupProps) {
-  const response: cResponse = {
-    status: 400,
-    message: "Algo deu errado ao criar restaurante",
-  };
+  const response = {} as SignupResponse;
   await instance
     .post("/addNewRestaurant", data)
     .then((result) => {

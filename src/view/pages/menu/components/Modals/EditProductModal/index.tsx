@@ -16,7 +16,6 @@ export function EditProductModal() {
     handleSubmit,
     isLoading,
     control,
-    categories,
   } = useEditProductModalController();
 
   return (
@@ -55,13 +54,7 @@ export function EditProductModal() {
               value={value}
               error={errors.category?.message}
             >
-              {categories!.map((category, index) => {
-                return (
-                  <SelectItem key={index} value={category}>
-                    {category}
-                  </SelectItem>
-                );
-              })}
+              <SelectItem value={value}>{value}</SelectItem>
             </Select>
           )}
         />

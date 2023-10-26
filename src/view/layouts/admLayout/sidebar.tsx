@@ -88,6 +88,7 @@ const Sidebar: FC<SidebarProps> = ({ setExpand }) => {
             if ("child" in item) {
               handleToggle(item.name);
             } else if ("link" in item) {
+              setActiveName("");
               navigate(item.link);
             }
           }}

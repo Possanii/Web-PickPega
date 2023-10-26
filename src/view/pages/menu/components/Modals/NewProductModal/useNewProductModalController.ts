@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { CATEGORIES } from "../../../../../../app/constants/categories";
 import { useMenu } from "../../MenuContext/useMenu";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -21,6 +20,9 @@ const ACCEPTED_IMAGE_TYPES = [
 const ACTIVE = ["true", "false"] as const;
 
 export function useNewProductModalController() {
+  const { isNewItemMenuModalOpen, closeNewItemMenuModal, filterOptions } =
+    useMenu();
+
   const registerProductSchema = z.object({
     photo: z
       .custom<FileList>()
@@ -35,7 +37,7 @@ export function useNewProductModalController() {
       ),
     name: z.string().nonempty(),
     description: z.string().nonempty(),
-    category: z.enum(CATEGORIES, {
+    category: z.enum(filterOptions as [string, ...string[]], {
       errorMap: (issue) => {
         switch (issue.code) {
           case "invalid_type":
@@ -58,7 +60,7 @@ export function useNewProductModalController() {
           }
         },
       })
-      .positive("Insira um tempo válido"),
+      .min(0, "Insira um tempo válido"),
     price: z.union([z.string().nonempty("Informe o valor"), z.number()]),
     active: z.enum(ACTIVE, {
       errorMap: (issue) => {
@@ -76,8 +78,6 @@ export function useNewProductModalController() {
 
   type FormData = z.infer<typeof registerProductSchema>;
 
-  const { isNewItemMenuModalOpen, closeNewItemMenuModal } = useMenu();
-
   const { user } = useUser();
 
   const queryClient = useQueryClient();
@@ -90,6 +90,9 @@ export function useNewProductModalController() {
     control,
   } = useForm<FormData>({
     resolver: zodResolver(registerProductSchema),
+    defaultValues: {
+      active: "true",
+    },
   });
 
   const { mutateAsync, isLoading } = useMutation({
@@ -146,6 +149,6 @@ export function useNewProductModalController() {
     errors,
     isLoading,
     control,
-    categories: user?.categories ?? [],
+    categories: filterOptions ?? [],
   };
 }

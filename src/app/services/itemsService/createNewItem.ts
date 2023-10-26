@@ -8,7 +8,7 @@ export async function createNewItem(data: Item, uid: string) {
     message: "Algo deu errado ao criar novo item",
   };
   const result = await instance
-    .post<cResponse>(`/addNewItem/?id=${uid}`, data)
+    .post<cResponse>(`/addNewItem/${uid}`, data)
     .then((result) => {
       if (result.status === 200) {
         response.status = 200;

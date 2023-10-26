@@ -7,6 +7,7 @@ import { AdmLayout } from "../view/layouts/admLayout";
 import { PageNotFound } from "../components/PageNotFound";
 import { MenuItemsPage } from "../view/pages/menu";
 import { ProfilePage } from "../view/pages/profile";
+import { BoardOrders } from "../view/pages/board";
 
 export function Router() {
   return (
@@ -21,8 +22,9 @@ export function Router() {
         <Route element={<AuthGuard isPrivate />}>
           <Route element={<AdmLayout />}>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/menu" element={<MenuItemsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/menu" element={<MenuItemsPage />} />
+            <Route path="/board" element={<BoardOrders />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Route>
