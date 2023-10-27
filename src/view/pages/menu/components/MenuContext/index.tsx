@@ -20,6 +20,8 @@ interface MenuContextValue {
   closeNewCategoryMenuModal(): void;
   newCategoryType: "NEW" | "EDIT" | null;
   categoryBeingEdited: null | { category: string; index: number };
+  onFilterChange(value: string): void;
+  filterValue: string | null;
 }
 
 export const MenuContext = createContext({} as MenuContextValue);
@@ -38,6 +40,7 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
     category: string;
     index: number;
   }>(null);
+  const [filterValue, setFilterValue] = useState<string>("Todos");
 
   const openNewItemMenuModal = useCallback(() => {
     setIsNewItemMenuModalOpen(true);
@@ -80,6 +83,10 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
     setIsNewCategoryMenuModalOpen(false);
   }, []);
 
+  const onFilterChange = useCallback((value: string) => {
+    setFilterValue(value);
+  }, []);
+
   return (
     <MenuContext.Provider
       value={{
@@ -98,6 +105,8 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
         closeNewCategoryMenuModal,
         newCategoryType,
         categoryBeingEdited,
+        onFilterChange,
+        filterValue,
       }}
     >
       {children}

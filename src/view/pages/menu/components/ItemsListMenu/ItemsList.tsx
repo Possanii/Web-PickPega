@@ -21,6 +21,7 @@ export function ItemsListMenu() {
     openNewItemMenuModal,
     openNewCategoryMenuModal,
     filterOptions,
+    onFilterChange,
   } = useMenuController();
 
   const hasItems = items.length > 0;
@@ -72,6 +73,7 @@ export function ItemsListMenu() {
                       isBeginning: swiper.isBeginning,
                       isEnd: swiper.isEnd,
                     });
+                    onFilterChange(filterOptions[swiper.activeIndex]);
                   }}
                   centeredSlides
                 >

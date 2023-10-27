@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMenu } from "../MenuContext/useMenu";
 import { useUser } from "../../../../../app/hooks/useUser";
 import { itemsService } from "../../../../../app/services/itemsService";
+import { Item } from "../../../../../app/interface/Item";
 
 export function useMenuController() {
   const [sliderState, setSliderState] = useState({
@@ -12,11 +13,16 @@ export function useMenuController() {
 
   const queryClient = useQueryClient();
 
-  const { openNewItemMenuModal, openNewCategoryMenuModal } = useMenu();
+  const {
+    openNewItemMenuModal,
+    openNewCategoryMenuModal,
+    filterValue,
+    onFilterChange,
+  } = useMenu();
 
   const { user } = useUser();
 
-  const filter: string[] = [];
+  const filter: string[] = ["Todos"];
 
   async function handleItems() {
     const categories = Object.entries(
@@ -52,14 +58,23 @@ export function useMenuController() {
     staleTime: Infinity,
   });
 
+  let itemsFilter: [string, Record<string, Item[]>][] | undefined;
+
+  if (filterValue === "Todos") {
+    itemsFilter = data;
+  } else {
+    itemsFilter = data?.filter((category) => category[0] === filterValue);
+  }
+
   return {
     sliderState,
     setSliderState,
-    items: data ?? [],
+    items: itemsFilter ?? data ?? [],
     filterOptions: categories ?? [],
     openNewItemMenuModal,
     openNewCategoryMenuModal,
     isInitialLoading,
     isFetching,
+    onFilterChange,
   };
 }
