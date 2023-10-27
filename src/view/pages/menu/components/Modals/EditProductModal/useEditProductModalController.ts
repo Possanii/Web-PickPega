@@ -107,17 +107,18 @@ export function useEditProductModalController() {
         try {
           const result = await itemsService.EditItem(
             {
-              id: itemBeingEdited!.id,
+              itemId: itemBeingEdited!.itemId,
               picture: photo.payload!.url,
               name: data.name,
               description: data.description,
               category: data.category,
               time: data.timer,
               price: currencyStringToNumber(data.price),
-              active: data.active === "true" ? true : false,
+              active:
+                data.active === "true" || data.active === true ? true : false,
               restaurantId: user!.uid,
             },
-            itemBeingEdited!.id!
+            itemBeingEdited!.itemId!
           );
 
           await storageService.deleteFromStorage(itemBeingEdited!.picture!);
@@ -131,16 +132,17 @@ export function useEditProductModalController() {
         try {
           const result = await itemsService.EditItem(
             {
-              id: itemBeingEdited!.id,
+              itemId: itemBeingEdited!.itemId,
               name: data.name,
               description: data.description,
               category: data.category,
               time: data.timer,
               price: currencyStringToNumber(data.price),
-              active: data.active === "true" ? true : false,
+              active:
+                data.active === "true" || data.active === true ? true : false,
               restaurantId: user!.uid,
             },
-            user!.uid
+            itemBeingEdited!.itemId!
           );
           return result;
         } catch (error) {

@@ -1,5 +1,5 @@
 export interface Item {
-  id?: string;
+  itemId?: string;
   time: number;
   picture?: string;
   price: number | string;

@@ -6,10 +6,10 @@ import emptyStateImage from "../../../../../assets/images/empty-state.svg";
 import { CardMenu } from "./cards";
 import { Button } from "../../../../../components/Button";
 import { Spinner } from "../../../../../components/Spinner";
+import { Item } from "../../../../../app/interface/Item";
 
 // Import Swiper styles
 import "swiper/css";
-import { Item } from "../../../../../app/interface/Item";
 
 export function ItemsListMenu() {
   const {
@@ -17,7 +17,7 @@ export function ItemsListMenu() {
     setSliderState,
     items,
     isInitialLoading,
-    isLoading,
+    isFetching,
     openNewItemMenuModal,
     openNewCategoryMenuModal,
     filterOptions,
@@ -28,13 +28,13 @@ export function ItemsListMenu() {
 
   return (
     <div>
-      {isInitialLoading && (
+      {(isInitialLoading || isFetching) && (
         <div className="flex flex-col items-center justify-center h-full">
           <Spinner className="h-40 w-40" />
         </div>
       )}
 
-      {!isInitialLoading && (
+      {!isInitialLoading && !isFetching && (
         <div>
           {!hasCategories && (
             <div className="h-full flex flex-col justify-center items-center">
@@ -92,12 +92,12 @@ export function ItemsListMenu() {
                   ))}
                 </Swiper>
               </div>
-              {isLoading && (
+              {isFetching && (
                 <div className="flex flex-col items-center justify-center h-full">
                   <Spinner className="h-40 w-40" />
                 </div>
               )}
-              {!isLoading && (
+              {!isFetching && (
                 <div className="flex flex-col max-h-[640px] overflow-y-auto">
                   {items.map((category: [string, Record<string, Item[]>]) =>
                     category[1].map((item: Item) => (
