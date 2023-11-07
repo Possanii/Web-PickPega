@@ -1,4 +1,4 @@
-import { useUser } from "../../../../../../app/hooks/useUser";
+import { useMenuController } from "../../ItemsListMenu/useMenuController";
 import { useMenu } from "../../MenuContext/useMenu";
 
 export function useCategoriesModal() {
@@ -9,13 +9,15 @@ export function useCategoriesModal() {
     newCategoryType,
   } = useMenu();
 
-  const { user } = useUser();
+  const { filterOptions } = useMenuController();
+
+  const categories = filterOptions.filter((category) => category !== "Todos");
 
   return {
     isCategoryMenuModalOpen,
     closeCategoryMenuModal,
     openNewCategoryMenuModal,
-    categories: user!.categories ?? [],
+    categories: categories ?? [],
     newCategoryType,
   };
 }

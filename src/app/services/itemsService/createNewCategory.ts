@@ -1,39 +1,39 @@
-import { Restaurant } from "../../interface/Restaurant";
+import { instance } from "../../api/FirebaseConfig";
+import cResponse from "../../interface/cResponse";
 
-interface cResponse {
+interface NewCategoryResponse {
   status: number;
   message: string;
-  payload?: Array<string>;
+  payload?: string;
 }
 
 export async function createNewCategory({
-  user,
-  category,
+  uid,
+  categoryName,
 }: {
-  user: Restaurant;
-  category: string;
+  uid: string;
+  categoryName: string;
 }) {
   const response: cResponse = {
     status: 500,
-    message: "Algo deu errado ao criar novo array de categoria",
+    message: "Algo deu errado ao criar novo item",
   };
-
-  if (user?.categories?.length === 0) {
-    response.status = 200;
-    response.message = "Inserido com sucesso";
-    response.payload = [category];
-    return response;
-  } else {
-    if (user?.categories?.includes(category)) {
-      response.status = 403;
-      response.message = "Categoria já existe";
+  const result = await instance
+    .post<NewCategoryResponse>(`/createCategory/${uid}`, {
+      categoryName: categoryName,
+    })
+    .then((result) => {
+      if (result.status === 200) {
+        response.status = 200;
+        response.message = result.data.message;
+        response.payload = result.data.payload;
+        return response;
+      } else {
+        return response;
+      }
+    })
+    .catch(() => {
       return response;
-    } else {
-      response.status = 200;
-      response.message = "Inserido com sucesso";
-      user?.categories?.push(category);
-      response.payload = user?.categories;
-      return response;
-    }
-  }
+    });
+  return result;
 }

@@ -22,9 +22,10 @@ export function useMenuController() {
 
   const { user } = useUser();
 
-  const filter: string[] = ["Todos"];
+  let filter: string[] = ["Todos"];
 
   async function handleItems() {
+    filter = ["Todos"];
     const categories = Object.entries(
       await itemsService.getAllItems(user!.uid)
     );

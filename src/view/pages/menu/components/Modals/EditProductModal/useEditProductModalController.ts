@@ -156,6 +156,7 @@ export function useEditProductModalController() {
     const response = await mutateAsync(data);
     if (response.status === 200) {
       queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast.success(response.message);
       closeEditItemMenuModal();
       reset();

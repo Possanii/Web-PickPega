@@ -8,6 +8,7 @@ import { UF } from "../../../app/constants/uf";
 import { useUser } from "../../../app/hooks/useUser";
 import { usersServices } from "../../../app/services/usersService";
 import { storageService } from "../../../app/services/storageService";
+import { Restaurant } from "../../../app/interface/Restaurant";
 
 export function useProfileController() {
   const { user } = useUser();
@@ -124,7 +125,21 @@ export function useProfileController() {
         data.photo = user?.photo;
       }
 
-      const response = await usersServices.editUser(data, user!.uid as string);
+      if (data.password !== undefined) {
+        const response = await usersServices.updatePassword({
+          uid: user!.uid,
+          password: data.password,
+        });
+
+        if (response.status !== 200) {
+          toast.error("Falha ao mudar senha");
+        }
+      }
+
+      const response = await usersServices.editUser(
+        data as Restaurant,
+        user!.uid as string
+      );
 
       return response;
     },

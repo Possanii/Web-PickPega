@@ -169,7 +169,7 @@ export function ProfilePage() {
                 {...register("photo")}
               />
 
-              <Button text="Cadastrar" type="submit" isLoading={isLoading} />
+              <Button text="Atualizar" type="submit" isLoading={isLoading} />
             </form>
           </main>
         </Card.Root>

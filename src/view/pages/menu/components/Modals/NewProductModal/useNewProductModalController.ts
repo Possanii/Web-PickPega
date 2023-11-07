@@ -8,6 +8,7 @@ import { itemsService } from "../../../../../../app/services/itemsService";
 import { useUser } from "../../../../../../app/hooks/useUser";
 import toast from "react-hot-toast";
 import { currencyStringToNumber } from "../../../../../../app/utils/currencyStringToNumber";
+import { useMenuController } from "../../ItemsListMenu/useMenuController";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -20,8 +21,9 @@ const ACCEPTED_IMAGE_TYPES = [
 const ACTIVE = ["true", "false"] as const;
 
 export function useNewProductModalController() {
-  const { isNewItemMenuModalOpen, closeNewItemMenuModal, filterOptions } =
-    useMenu();
+  const { isNewItemMenuModalOpen, closeNewItemMenuModal } = useMenu();
+
+  const { filterOptions } = useMenuController();
 
   const registerProductSchema = z.object({
     photo: z
@@ -141,6 +143,8 @@ export function useNewProductModalController() {
     }
   });
 
+  const categories = filterOptions.filter((category) => category !== "Todos");
+
   return {
     isNewItemMenuModalOpen,
     closeNewItemMenuModal,
@@ -149,6 +153,6 @@ export function useNewProductModalController() {
     errors,
     isLoading,
     control,
-    categories: filterOptions ?? [],
+    categories: categories ?? [],
   };
 }

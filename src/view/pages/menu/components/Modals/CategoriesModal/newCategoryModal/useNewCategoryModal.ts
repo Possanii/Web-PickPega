@@ -44,8 +44,8 @@ export function useNewCategoryModal() {
       let categoriesList;
       if (newCategoryType === "NEW") {
         categoriesList = await itemsService.createNewCategory({
-          user: user!,
-          category: data.category,
+          uid: user!.uid,
+          categoryName: data.category,
         });
       } else {
         categoriesList = await itemsService.editCategory({
@@ -54,22 +54,14 @@ export function useNewCategoryModal() {
           index: categoryBeingEdited!.index,
         });
       }
-
-      if (categoriesList.status !== 200) {
-        return categoriesList;
-      } else {
-        return usersServices.editUser({
-          ...user!,
-          categories: categoriesList.payload,
-        });
-      }
+      return categoriesList;
     },
   });
 
   const handleSubmit = hookFormHandleSubmit(async (data) => {
     const response = await mutateAsync(data);
     if (response.status === 200) {
-      queryClient.invalidateQueries({ queryKey: ["users", "me"] });
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast.success(
         newCategoryType === "NEW" ? "Categoria criada" : "Categoria Atualizada"
       );
