@@ -1,18 +1,23 @@
-import toast from "react-hot-toast";
+import { Order } from "../../../../../../../app/interface/Order";
+import { useBoardOrderController } from "./useBoardOrderController";
 
 interface BoardOrderProps {
-  table: string;
+  order: Order;
 }
 
-export function BoardOrder({ table }: BoardOrderProps) {
+export function BoardOrder({ order }: BoardOrderProps) {
+  const { handleOpenOrderModal } = useBoardOrderController();
+
   return (
     <div
       className="flex flex-col justify-center items-center border rounded-lg h-[128px]"
       role="button"
-      onClick={() => toast.success("clicou")}
+      onClick={() =>
+        handleOpenOrderModal(order.products, order.status, order.table)
+      }
     >
-      <strong>{table}</strong>
-      <span className="opacity-50">2 Items</span>
+      <strong>Mesa {order.table}</strong>
+      <span className="opacity-50">{order.products.length} Items</span>
     </div>
   );
 }

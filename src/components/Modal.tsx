@@ -25,7 +25,7 @@ export function Modal({
         <RdxModal.Overlay className="fixed inset-0 z-[1000] bg-black/70 backdrop-blur-sm data-[state=open]:animate-overlayShow" />
         <RdxModal.Content
           className={cn(
-            "data-[state=open]:animate-contentShow fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 space-y-10 bg-white rounded-2xl z-[1000]",
+            "data-[state=open]:animate-contentShow fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-8 space-y-10 bg-white rounded-2xl z-[1000]",
             "w-full max-w-[500px] outline-none",
             className
           )}

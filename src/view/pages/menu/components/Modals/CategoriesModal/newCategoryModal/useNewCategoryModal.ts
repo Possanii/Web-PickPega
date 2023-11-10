@@ -62,11 +62,11 @@ export function useNewCategoryModal() {
     const response = await mutateAsync(data);
     if (response.status === 200) {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["items"] });
       toast.success(
         newCategoryType === "NEW" ? "Categoria criada" : "Categoria Atualizada"
       );
       closeNewCategoryMenuModal();
-      openCategoryMenuModal();
       reset();
     } else {
       toast.error(
