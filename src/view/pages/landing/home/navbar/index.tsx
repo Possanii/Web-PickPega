@@ -36,7 +36,7 @@ const Navbar = () => {
     },
   ];
   return (
-    <nav>
+    <nav className="flex justify-between items-center min-h-[90px]">
       <div className="nav-logo-container">
         <img src={Logo} alt="" />
       </div>
