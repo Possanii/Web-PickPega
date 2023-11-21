@@ -43,7 +43,7 @@ export function NewProductModal() {
           error={errors.description?.message}
           {...register("description")}
         />
-        <div className="flex">
+        <div className="flex justify-between gap-4">
           <Controller
             control={control}
             name="category"
@@ -66,6 +66,7 @@ export function NewProductModal() {
             )}
           />
           <Input
+            className="min-w-[200px]"
             placeholder="Nova categoria"
             error={errors.newCategory?.message}
             {...register("newCategory")}
@@ -77,8 +78,8 @@ export function NewProductModal() {
           render={({ field: { onChange, value } }) => (
             <InputHours
               placeholder="Tempo de preparo"
-              onChange={onChange}
               value={value}
+              onChange={onChange}
               error={errors.timer?.message}
             />
           )}

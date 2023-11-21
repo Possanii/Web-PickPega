@@ -20,7 +20,7 @@ export function PageNotFound() {
             <h1 className="text-3xl">PÁGINA NÃO ENCONTRADA 😭</h1>
             <p>Não encontramos a página que você está procurando.</p>
             <div className="flex justify-center items-center">
-              <Link to="/">Ir para Dashboard</Link>
+              <Link to="/dashboard">Ir para Dashboard</Link>
             </div>
           </div>
         </div>

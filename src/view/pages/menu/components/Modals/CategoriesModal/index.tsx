@@ -42,7 +42,7 @@ export function CategoriesModal() {
               );
             })}
           </div>
-          <div className="flex justify-center mt-4">
+          {/* <div className="flex justify-center mt-4">
             <Button
               text="Cadastrar categoria"
               onClick={() => {
@@ -50,7 +50,7 @@ export function CategoriesModal() {
               }}
               className="w-auto"
             />
-          </div>
+          </div> */}
         </div>
       )}
     </Modal>

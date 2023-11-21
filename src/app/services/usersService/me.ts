@@ -9,7 +9,7 @@ export async function getMe() {
 
   const uid = auth.currentUser.uid;
   const user = await instance
-    .get<Restaurant>(`/getRestaurantById/?id=${uid}`)
+    .get<Restaurant>(`/getRestaurantById/${uid}`)
     .then((response) => {
       if (response.status === 200) {
         return response.data;

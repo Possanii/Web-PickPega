@@ -35,7 +35,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     forwardedRef
   ) => {
     return (
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full">
         <RdxSelect.Root
           name={name}
           value={value}

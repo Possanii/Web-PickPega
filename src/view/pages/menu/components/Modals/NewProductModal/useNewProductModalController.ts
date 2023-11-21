@@ -9,6 +9,7 @@ import { useUser } from "../../../../../../app/hooks/useUser";
 import toast from "react-hot-toast";
 import { currencyStringToNumber } from "../../../../../../app/utils/currencyStringToNumber";
 import { useMenuController } from "../../ItemsListMenu/useMenuController";
+import { useState } from "react";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -21,63 +22,90 @@ const ACCEPTED_IMAGE_TYPES = [
 const ACTIVE = ["true", "false"] as const;
 
 export function useNewProductModalController() {
+  const [isNewCategoryDisable, setIsNewCategoryDisable] = useState(true);
   const { isNewItemMenuModalOpen, closeNewItemMenuModal } = useMenu();
 
   const { filterOptions } = useMenuController();
 
-  const registerProductSchema = z.object({
-    photo: z
-      .custom<FileList>()
-      .refine((files) => files?.length === 1, "Insira uma imagem.")
-      .refine(
-        (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-        `Tamanho máximo da imagem é de 5MB.`
-      )
-      .refine(
-        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-        "Selecione uma imagem tipo .jpg, .jpeg, .png ou .webp."
-      ),
-    name: z.string().nonempty(),
-    description: z.string().nonempty(),
-    category: z.enum(filterOptions as [string, ...string[]], {
-      errorMap: (issue) => {
-        switch (issue.code) {
-          case "invalid_type":
-            return { message: "Selecione uma opção válida." };
-          case "invalid_enum_value":
-            return { message: "Selecione uma opção válida." };
-          default:
-            return { message: "Selecione uma opção" };
-        }
-      },
-    }),
-    newCategory: z.string().optional(),
-    timer: z
-      .number({
+  const categories = filterOptions.filter((category) => category !== "Todos");
+
+  categories.push("Nova categoria");
+
+  const registerProductSchema = z
+    .object({
+      photo: z
+        .custom<FileList>()
+        .refine((files) => files?.length === 1, "Insira uma imagem.")
+        .refine(
+          (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+          `Tamanho máximo da imagem é de 5MB.`
+        )
+        .refine(
+          (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+          "Selecione uma imagem tipo .jpg, .jpeg, .png ou .webp."
+        ),
+      name: z.string().nonempty(),
+      description: z.string().nonempty(),
+      category: z.enum(categories as [string, ...string[]], {
         errorMap: (issue) => {
           switch (issue.code) {
             case "invalid_type":
-              return { message: "Insira somente números." };
+              return { message: "Selecione uma opção válida." };
+            case "invalid_enum_value":
+              return { message: "Selecione uma opção válida." };
             default:
-              return { message: "Insira um tempo" };
+              return { message: "Selecione uma opção" };
           }
         },
-      })
-      .min(0, "Insira um tempo válido"),
-    price: z.union([z.string().nonempty("Informe o valor"), z.number()]),
-    active: z.enum(ACTIVE, {
-      errorMap: (issue) => {
-        switch (issue.code) {
-          case "invalid_type":
-            return { message: "Selecione uma opção válida." };
-          case "invalid_enum_value":
-            return { message: "Selecione uma opção válida." };
-          default:
-            return { message: "Selecione uma opção" };
-        }
-      },
-    }),
-  });
+      }),
+      newCategory: z.string().optional(),
+      timer: z
+        .number({
+          errorMap: (issue) => {
+            switch (issue.code) {
+              case "invalid_type":
+                return { message: "Insira somente números." };
+              default:
+                return { message: "Insira um tempo" };
+            }
+          },
+        })
+        .min(0, "Insira um tempo válido"),
+      price: z.union([z.string().nonempty("Informe o valor"), z.number()]),
+      active: z.enum(ACTIVE, {
+        errorMap: (issue) => {
+          switch (issue.code) {
+            case "invalid_type":
+              return { message: "Selecione uma opção válida." };
+            case "invalid_enum_value":
+              return { message: "Selecione uma opção válida." };
+            default:
+              return { message: "Selecione uma opção" };
+          }
+        },
+      }),
+    })
+    .superRefine(({ category, newCategory }, refinementContext) => {
+      if (category === "Nova categoria") {
+        setIsNewCategoryDisable(false);
+      } else {
+        setIsNewCategoryDisable(true);
+      }
+      if (
+        category === "Nova categoria" &&
+        (newCategory === undefined ||
+          newCategory === null ||
+          newCategory === "")
+      ) {
+        refinementContext.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Insira o nome da nova categoria",
+          path: ["newCategory"],
+        });
+      } else {
+        return;
+      }
+    });
 
   type FormData = z.infer<typeof registerProductSchema>;
 
@@ -115,7 +143,7 @@ export function useNewProductModalController() {
             picture: photo.payload!.url,
             name: data.name,
             description: data.description,
-            category: data.category,
+            category: data.newCategory ? data.newCategory : data.category,
             time: data.timer,
             price: currencyStringToNumber(data.price),
             active: data.active === "true" ? true : false,
@@ -144,8 +172,6 @@ export function useNewProductModalController() {
     }
   });
 
-  const categories = filterOptions.filter((category) => category !== "Todos");
-
   return {
     isNewItemMenuModalOpen,
     closeNewItemMenuModal,
@@ -155,5 +181,6 @@ export function useNewProductModalController() {
     isLoading,
     control,
     categories: categories ?? [],
+    isNewCategoryDisable,
   };
 }

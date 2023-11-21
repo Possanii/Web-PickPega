@@ -13,7 +13,7 @@ export function HomeLandingPage() {
           <h1 className="primary-heading2">fila!</h1>
           <p className="primary-text">
             Opss, quer dizer não entre nessa fria.
-            <p className="primary-text">Apenas "Pick” e então Pegue.</p>
+            <span className="primary-text">Apenas "Pick” e então Pegue.</span>
           </p>
           <button className="secondary-button">
             Baixe agora <FiArrowRight />{" "}

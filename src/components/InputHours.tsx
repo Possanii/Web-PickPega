@@ -5,7 +5,7 @@ import { NumericFormat } from "react-number-format";
 interface InputHoursProps {
   error?: string;
   value?: number;
-  onChange?(value: string): void;
+  onChange?(value: number): void;
   className?: string;
   placeholder?: string;
 }
@@ -23,7 +23,7 @@ export function InputHours({
         decimalScale={2}
         decimalSeparator=":"
         value={value}
-        onChange={(event) => onChange?.(event.target.value)}
+        onChange={(event) => onChange?.(Number(event.target.value))}
         className={cn(
           "bg-gray-100 w-full h-[52px] rounded-lg px-3 hover:px-2.5 focus:px-[9px] pt-4 placeholder-shown:pt-0 text-base leading-none text-black outline-none border hover:border-2 focus:border-[3px] hover:border-light-yellow/50 focus:border-light-yellow peer",
           error && "!border-red-900",
