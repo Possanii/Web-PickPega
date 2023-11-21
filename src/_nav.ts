@@ -12,7 +12,7 @@ const nav = [
     name: "dashboard",
     parent: true,
     icon: DashboardIcon,
-    link: "/",
+    link: "/dashboard",
   },
   {
     id: "profile",

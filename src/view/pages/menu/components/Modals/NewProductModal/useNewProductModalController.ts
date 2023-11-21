@@ -51,6 +51,7 @@ export function useNewProductModalController() {
         }
       },
     }),
+    newCategory: z.string().optional(),
     timer: z
       .number({
         errorMap: (issue) => {

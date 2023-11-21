@@ -5,6 +5,7 @@ import { Modal } from "../../../../../../components/Modal";
 import { Select, SelectItem } from "../../../../../../components/Select";
 import { useNewProductModalController } from "./useNewProductModalController";
 import { InputCurrency } from "../../../../../../components/InputCurrency";
+import { InputHours } from "../../../../../../components/InputHours";
 
 export function NewProductModal() {
   const {
@@ -42,31 +43,45 @@ export function NewProductModal() {
           error={errors.description?.message}
           {...register("description")}
         />
+        <div className="flex">
+          <Controller
+            control={control}
+            name="category"
+            render={({ field: { onChange, value } }) => (
+              <Select
+                placeholder="Categorias"
+                name="category"
+                onChange={onChange}
+                value={value}
+                error={errors.category?.message}
+              >
+                {categories!.map((category, index) => {
+                  return (
+                    <SelectItem key={index} value={category}>
+                      {category}
+                    </SelectItem>
+                  );
+                })}
+              </Select>
+            )}
+          />
+          <Input
+            placeholder="Nova categoria"
+            error={errors.newCategory?.message}
+            {...register("newCategory")}
+          />
+        </div>
         <Controller
           control={control}
-          name="category"
+          name="timer"
           render={({ field: { onChange, value } }) => (
-            <Select
-              placeholder="Categorias"
-              name="Categorias"
+            <InputHours
+              placeholder="Tempo de preparo"
               onChange={onChange}
               value={value}
-              error={errors.category?.message}
-            >
-              {categories!.map((category, index) => {
-                return (
-                  <SelectItem key={index} value={category}>
-                    {category}
-                  </SelectItem>
-                );
-              })}
-            </Select>
+              error={errors.timer?.message}
+            />
           )}
-        />
-        <Input
-          placeholder="Tempo de preparo"
-          error={errors.timer?.message}
-          {...register("timer", { valueAsNumber: true })}
         />
         <Controller
           control={control}
