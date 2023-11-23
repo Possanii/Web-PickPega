@@ -17,6 +17,7 @@ export function NewProductModal() {
     isLoading,
     control,
     categories,
+    isNewCategoryDisable,
   } = useNewProductModalController();
 
   return (
@@ -69,6 +70,7 @@ export function NewProductModal() {
             className="min-w-[200px]"
             placeholder="Nova categoria"
             error={errors.newCategory?.message}
+            disabled={isNewCategoryDisable}
             {...register("newCategory")}
           />
         </div>

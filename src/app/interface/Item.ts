@@ -9,3 +9,7 @@ export interface Item {
   active: boolean;
   restaurantId: string;
 }
+
+export interface ItemOrder extends Item {
+  qntd: number;
+}

@@ -1,15 +1,12 @@
+import { ItemOrder } from "./Item";
+
 export interface Order {
-  _id: string;
-  table: string;
-  status: "WAITING" | "DOING" | "DONE";
-  createdAt: Date;
-  products: {
-    _id: string;
-    quantity: number;
-    product: {
-      name: string;
-      imagePath: string;
-      price: number;
-    };
-  }[];
+  name: string;
+  status: "Em espera" | "Em produção" | "Finalizado";
+  date: string;
+  necessaryTime: number;
+  time: string;
+  payment: string;
+  price: number;
+  products: Array<ItemOrder>;
 }

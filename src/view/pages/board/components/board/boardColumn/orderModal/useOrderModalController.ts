@@ -9,7 +9,7 @@ export function useOrderModalController() {
 
   const CalculateTotalPrice = useMemo(() => {
     orderBeingViewed!.products.forEach((product) => {
-      setTotalPrice((prev) => prev + product.product.price);
+      setTotalPrice((prev) => prev + Number(product.price) * product.qntd);
     });
   }, [orderBeingViewed]);
 

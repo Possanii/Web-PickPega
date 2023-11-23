@@ -18,7 +18,7 @@ export function BoardColumn({ icon, title, orders }: BoardColumnProps) {
       {orders.length > 0 && (
         <div className="flex flex-col gap-4">
           {orders.map((order) => {
-            return <BoardOrder key={order._id} order={order} />;
+            return <BoardOrder key={order.name} order={order} />;
           })}
         </div>
       )}

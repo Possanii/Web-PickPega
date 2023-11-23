@@ -23,9 +23,9 @@ export function OrderModal() {
             Status do Pedido
           </h3>
           <span>
-            {orderBeingViewed!.status === "WAITING"
+            {orderBeingViewed!.status === "Em espera"
               ? "🕑 Fila de espera"
-              : orderBeingViewed!.status === "DOING"
+              : orderBeingViewed!.status === "Em produção"
               ? "👨‍🍳 Em produção"
               : "✅ Prontos"}
           </span>
@@ -37,22 +37,22 @@ export function OrderModal() {
           <div className="flex flex-col gap-4 mb-6">
             {orderBeingViewed!.products.map((product) => {
               return (
-                <div key={product._id} className="flex items-center">
+                <div key={product.name} className="flex items-center">
                   <img
                     className="w-12 h-10 mr-3"
                     alt="Imagem do produto"
-                    src={product.product.imagePath}
+                    src={product.picture}
                   />
                   <div className="flex gap-4">
                     <span className="text-sm font-normal leading-[21px] text-gray-500/80">
-                      {product.quantity}x
+                      {product.qntd}x
                     </span>
                     <div className="flex flex-col">
                       <span className="font-semibold leading-6">
-                        {product.product.name}
+                        {product.name}
                       </span>
                       <span className="text-sm leading-[21px] font-normal text-gray-500/80">
-                        {product.product.price}
+                        {formatCurrency(Number(product.price))}
                       </span>
                     </div>
                   </div>
