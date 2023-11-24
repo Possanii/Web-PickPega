@@ -60,11 +60,19 @@ export function OrderModal() {
               );
             })}
           </div>
-          <div className="flex flex-row justify-between items-center">
-            <span className="text-sm font-medium leading-[21px] text-gray-500/80">
-              Total
-            </span>
-            <span>{formatCurrency(totalPrice)}</span>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row justify-between items-center">
+              <span className="text-sm font-medium leading-[21px] text-gray-500/80">
+                Total
+              </span>
+              <span>{formatCurrency(totalPrice)}</span>
+            </div>
+            <div className="flex flex-row justify-between items-center">
+              <span className="text-sm font-medium leading-[21px] text-gray-500/80">
+                Pagamento
+              </span>
+              <span>{orderBeingViewed!.payment}</span>
+            </div>
           </div>
         </div>
         <div className="flex gap-4">

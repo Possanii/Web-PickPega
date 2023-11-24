@@ -89,6 +89,26 @@ const registerSchema = z.object({
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
       "Selecione uma imagem tipo .jpg, .jpeg, .png ou .webp."
     ),
+  openDayOn: z
+    .string({
+      required_error: "Insira um valor",
+    })
+    .nonempty("Selecione uma dia de abertura"),
+  closeDayOn: z
+    .string({
+      required_error: "Insira um valor",
+    })
+    .nonempty("Selecione um dia de fechamento"),
+  openHourOn: z
+    .string({
+      required_error: "Insira um valor",
+    })
+    .nonempty("Selecione um horário de abertura"),
+  closeHourOn: z
+    .string({
+      required_error: "Insira um valor",
+    })
+    .nonempty("Selecione um horário de fechamento"),
   lat: z.number().optional(),
   lng: z.number().optional(),
 });
@@ -141,6 +161,8 @@ export function useRegisterController() {
             zip: data.address.zip,
           },
           photo: photo.payload!.url,
+          openDays: `${data.openDayOn} - ${data.closeDayOn}`,
+          openHours: `${data.openHourOn} - ${data.closeHourOn}`,
           lat: geoLocation.payload!.lat,
           lng: geoLocation.payload!.lng,
         });

@@ -22,6 +22,8 @@ interface SignupProps {
     zip: number;
   };
   photo: string;
+  openDays: string;
+  openHours: string;
   lat: number;
   lng: number;
 }

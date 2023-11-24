@@ -1,6 +1,7 @@
 import { ItemOrder } from "./Item";
 
 export interface Order {
+  orderId: string;
   name: string;
   status: "Em espera" | "Em produção" | "Finalizado";
   date: string;

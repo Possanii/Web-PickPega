@@ -7,7 +7,7 @@ export function DashboardOrders() {
   const { orderBeingViewed, orders, isFetching } = useBoardController();
 
   return (
-    <div className="w-full flex flex-1 gap-8 mt-10">
+    <div className="w-full flex flex-1 gap-8 mt-10 justify-center">
       {isFetching && (
         <div className="flex flex-col items-center justify-center h-full">
           <Spinner className="h-40 w-40" />

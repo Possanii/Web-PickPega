@@ -6,8 +6,11 @@ import { Select, SelectItem } from "../../../../../../components/Select";
 import { useNewProductModalController } from "./useNewProductModalController";
 import { InputCurrency } from "../../../../../../components/InputCurrency";
 import { InputHours } from "../../../../../../components/InputHours";
+import { useState } from "react";
 
 export function NewProductModal() {
+  const [isNewCategoryDisable, setIsNewCategoryDisable] = useState(true);
+
   const {
     isNewItemMenuModalOpen,
     closeNewItemMenuModal,
@@ -17,7 +20,6 @@ export function NewProductModal() {
     isLoading,
     control,
     categories,
-    isNewCategoryDisable,
   } = useNewProductModalController();
 
   return (
@@ -48,12 +50,16 @@ export function NewProductModal() {
           <Controller
             control={control}
             name="category"
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange } }) => (
               <Select
                 placeholder="Categorias"
                 name="category"
-                onChange={onChange}
-                value={value}
+                onChange={(value) => {
+                  onChange(value);
+                  if (value === "Nova categoria") {
+                    setIsNewCategoryDisable(false);
+                  } else setIsNewCategoryDisable(true);
+                }}
                 error={errors.category?.message}
               >
                 {categories!.map((category, index) => {
@@ -77,10 +83,9 @@ export function NewProductModal() {
         <Controller
           control={control}
           name="timer"
-          render={({ field: { onChange, value } }) => (
+          render={({ field: { onChange } }) => (
             <InputHours
               placeholder="Tempo de preparo"
-              value={value}
               onChange={onChange}
               error={errors.timer?.message}
             />
@@ -89,11 +94,10 @@ export function NewProductModal() {
         <Controller
           control={control}
           name="price"
-          render={({ field: { onChange, value } }) => (
+          render={({ field: { onChange } }) => (
             <InputCurrency
               placeholder="Valor"
               onChange={onChange}
-              value={value}
               error={errors.price?.message}
             />
           )}

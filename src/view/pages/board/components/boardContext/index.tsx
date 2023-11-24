@@ -6,13 +6,15 @@ interface BoardContextValue {
   handleOpenOrderModal(
     products: ItemOrder[],
     status: "Em espera" | "Em produção" | "Finalizado",
-    table: string
+    table: string,
+    payment: string
   ): void;
   handleCloseOrderModal(): void;
   orderBeingViewed: null | {
     products: ItemOrder[];
     status: "Em espera" | "Em produção" | "Finalizado";
     table: string;
+    payment: string;
   };
 }
 
@@ -24,16 +26,18 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
     products: ItemOrder[];
     status: "Em espera" | "Em produção" | "Finalizado";
     table: string;
+    payment: string;
   }>(null);
 
   const handleOpenOrderModal = useCallback(
     (
       products: ItemOrder[],
       status: "Em espera" | "Em produção" | "Finalizado",
-      table: string
+      table: string,
+      payment: string
     ) => {
       setIsOpenOrderModalOpen(true);
-      setOrderBeingViewed({ products, status, table });
+      setOrderBeingViewed({ products, status, table, payment });
     },
     []
   );

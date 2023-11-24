@@ -9,7 +9,6 @@ import { useUser } from "../../../../../../app/hooks/useUser";
 import toast from "react-hot-toast";
 import { currencyStringToNumber } from "../../../../../../app/utils/currencyStringToNumber";
 import { useMenuController } from "../../ItemsListMenu/useMenuController";
-import { useState } from "react";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -22,7 +21,6 @@ const ACCEPTED_IMAGE_TYPES = [
 const ACTIVE = ["true", "false"] as const;
 
 export function useNewProductModalController() {
-  const [isNewCategoryDisable, setIsNewCategoryDisable] = useState(true);
   const { isNewItemMenuModalOpen, closeNewItemMenuModal } = useMenu();
 
   const { filterOptions } = useMenuController();
@@ -86,11 +84,6 @@ export function useNewProductModalController() {
       }),
     })
     .superRefine(({ category, newCategory }, refinementContext) => {
-      if (category === "Nova categoria") {
-        setIsNewCategoryDisable(false);
-      } else {
-        setIsNewCategoryDisable(true);
-      }
       if (
         category === "Nova categoria" &&
         (newCategory === undefined ||
@@ -181,6 +174,5 @@ export function useNewProductModalController() {
     isLoading,
     control,
     categories: categories ?? [],
-    isNewCategoryDisable,
   };
 }

@@ -12,6 +12,8 @@ import { searchAddressByZip } from "../../../app/services/locationService/search
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Controller } from "react-hook-form";
+import { weekDays } from "../../../app/constants/weekDays";
+import { hours } from "../../../app/constants/hours";
 
 export function Register() {
   const [loading, setLoading] = useState(false);
@@ -179,6 +181,80 @@ export function Register() {
               error={errors.photo?.message}
               {...register("photo")}
             />
+            <div className="flex flex-row gap-2">
+              <Controller
+                control={control}
+                name="openDayOn"
+                render={({ field: { onChange } }) => (
+                  <Select
+                    name="Dia de abertura"
+                    placeholder="Aberto em"
+                    onChange={onChange}
+                    error={errors.openDayOn?.message}
+                  >
+                    {weekDays.map((day, index) => (
+                      <SelectItem key={index} value={day}>
+                        {day}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                )}
+              />
+              <Controller
+                control={control}
+                name="closeDayOn"
+                render={({ field: { onChange } }) => (
+                  <Select
+                    name="Dia de fechamento"
+                    placeholder="Fecha em"
+                    onChange={onChange}
+                    error={errors.closeDayOn?.message}
+                  >
+                    {weekDays.map((day, index) => (
+                      <SelectItem key={index} value={day}>
+                        {day}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                )}
+              />
+              <Controller
+                control={control}
+                name="openHourOn"
+                render={({ field: { onChange } }) => (
+                  <Select
+                    name="Hora de abertura"
+                    placeholder="Aberto às"
+                    onChange={onChange}
+                    error={errors.openHourOn?.message}
+                  >
+                    {hours.map((hour, index) => (
+                      <SelectItem key={index} value={hour}>
+                        {hour}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                )}
+              />
+              <Controller
+                control={control}
+                name="closeHourOn"
+                render={({ field: { onChange } }) => (
+                  <Select
+                    name="Hora de fechamento"
+                    placeholder="Fecha às"
+                    onChange={onChange}
+                    error={errors.closeHourOn?.message}
+                  >
+                    {hours.map((hour, index) => (
+                      <SelectItem key={index} value={hour}>
+                        {hour}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                )}
+              />
+            </div>
 
             <Button text="Cadastrar" type="submit" isLoading={isLoading} />
           </form>
