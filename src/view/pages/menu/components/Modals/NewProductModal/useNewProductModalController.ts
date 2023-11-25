@@ -157,6 +157,8 @@ export function useNewProductModalController() {
 
     if (response.status === 200) {
       queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast.success(response.message);
       closeNewItemMenuModal();
       reset();
