@@ -9,6 +9,8 @@ export function OrderModal() {
     handleCloseOrderModal,
     orderBeingViewed,
     totalPrice,
+    handleStatusOrder,
+    isLoading,
   } = useOrderModalController();
 
   return (
@@ -75,13 +77,25 @@ export function OrderModal() {
             </div>
           </div>
         </div>
-        <div className="flex gap-4">
-          <Button
-            text="Cancelar Pedido"
-            className="bg-transparent text-red-600"
-          />
-          <Button text="Concluir Pedido" />
-        </div>
+        {orderBeingViewed?.status !== "Finalizado" && (
+          <div className="flex gap-4">
+            <Button
+              text="Cancelar Pedido"
+              className="bg-transparent text-red-600 disabled:bg-transparent disabled:text-red-600/50"
+              disabled={isLoading}
+            />
+
+            <Button
+              text={
+                orderBeingViewed?.status === "Em espera"
+                  ? "Aceitar pedido"
+                  : "Concluir Pedido"
+              }
+              onClick={handleStatusOrder}
+              isLoading={isLoading}
+            />
+          </div>
+        )}
       </div>
     </Modal>
   );

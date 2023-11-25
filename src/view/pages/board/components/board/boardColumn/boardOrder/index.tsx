@@ -13,12 +13,13 @@ export function BoardOrder({ order }: BoardOrderProps) {
       className="flex flex-col justify-center items-center border rounded-lg h-[128px]"
       role="button"
       onClick={() =>
-        handleOpenOrderModal(
-          order.products,
-          order.status,
-          order.name,
-          order.payment
-        )
+        handleOpenOrderModal({
+          orderId: order.orderId,
+          products: order.products,
+          status: order.status,
+          payment: order.payment,
+          table: order.name,
+        })
       }
     >
       <strong>Mesa {order.name}</strong>

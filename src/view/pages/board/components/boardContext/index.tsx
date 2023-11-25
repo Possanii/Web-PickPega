@@ -1,43 +1,24 @@
 import { createContext, useCallback, useState } from "react";
-import { ItemOrder } from "../../../../../app/interface/Item";
+import { OrderBeingViewed } from "../../../../../app/interface/OrderBeingViewed";
 
 interface BoardContextValue {
   isOpenOrderModalOpen: boolean;
-  handleOpenOrderModal(
-    products: ItemOrder[],
-    status: "Em espera" | "Em produção" | "Finalizado",
-    table: string,
-    payment: string
-  ): void;
+  handleOpenOrderModal(orderBeingViewed: OrderBeingViewed): void;
   handleCloseOrderModal(): void;
-  orderBeingViewed: null | {
-    products: ItemOrder[];
-    status: "Em espera" | "Em produção" | "Finalizado";
-    table: string;
-    payment: string;
-  };
+  orderBeingViewed: null | OrderBeingViewed;
 }
 
 export const BoardContext = createContext({} as BoardContextValue);
 
 export function BoardProvider({ children }: { children: React.ReactNode }) {
   const [isOpenOrderModalOpen, setIsOpenOrderModalOpen] = useState(false);
-  const [orderBeingViewed, setOrderBeingViewed] = useState<null | {
-    products: ItemOrder[];
-    status: "Em espera" | "Em produção" | "Finalizado";
-    table: string;
-    payment: string;
-  }>(null);
+  const [orderBeingViewed, setOrderBeingViewed] =
+    useState<null | OrderBeingViewed>(null);
 
   const handleOpenOrderModal = useCallback(
-    (
-      products: ItemOrder[],
-      status: "Em espera" | "Em produção" | "Finalizado",
-      table: string,
-      payment: string
-    ) => {
+    ({ products, status, table, payment, orderId }: OrderBeingViewed) => {
       setIsOpenOrderModalOpen(true);
-      setOrderBeingViewed({ products, status, table, payment });
+      setOrderBeingViewed({ products, status, table, payment, orderId });
     },
     []
   );
