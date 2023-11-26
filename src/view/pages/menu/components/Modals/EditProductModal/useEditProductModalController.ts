@@ -121,7 +121,7 @@ export function useEditProductModalController() {
             itemBeingEdited!.itemId!
           );
 
-          await storageService.deleteFromStorage(itemBeingEdited!.picture!);
+          // await storageService.deleteFromStorage(itemBeingEdited!.picture!);
 
           return result;
         } catch (error) {

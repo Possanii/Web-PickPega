@@ -15,6 +15,6 @@ export async function GetDailyOrders(uid: string) {
   if (result.data.status !== 200) {
     return [];
   } else {
-    return result.data.payload;
+    return result.data.payload.sort((a, b) => a.date.localeCompare(b.date));
   }
 }

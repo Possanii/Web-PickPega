@@ -4,6 +4,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFunctions } from "firebase/functions";
 import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
 import { localStorageKeys } from "../config/localStorageKeys";
 import { sleep } from "../utils/sleep";
 
@@ -34,6 +35,9 @@ const storage = getStorage(app);
 // Firebase auth reference
 const auth = getAuth(app);
 
+// Initialize Cloud Firestore and get a reference to the service
+const firestore = getFirestore(app);
+
 // instancia do axios para fazer requisições via http
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_FIREBASE_URL,
@@ -55,4 +59,4 @@ instance.interceptors.response.use(async (data) => {
   return data;
 });
 
-export { app, functions, storage, auth, instance };
+export { app, functions, storage, auth, firestore, instance };
