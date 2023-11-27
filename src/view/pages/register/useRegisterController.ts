@@ -9,6 +9,7 @@ import { locationService } from "../../../app/services/locationService";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../app/hooks/useAuth";
+import { User } from "firebase/auth";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -113,6 +114,12 @@ const registerSchema = z.object({
   lng: z.number().optional(),
 });
 
+interface SigninResponse {
+  status: number;
+  message: string;
+  payload: User | null;
+}
+
 type FormData = z.infer<typeof registerSchema>;
 
 export function useRegisterController() {
@@ -129,13 +136,19 @@ export function useRegisterController() {
 
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: async (data: FormData) => {
+      const response: SigninResponse = {
+        status: 400,
+        message: "Algo deu errado",
+        payload: null,
+      };
       const photo = await storageService.uploadToStorage(
         data.photo[0],
         "/FotosRestaurantes"
       );
 
       if (photo.status !== 200) {
-        return photo;
+        response.message = photo.message;
+        return response;
       }
 
       const geoLocation = await locationService.getGeoPosition(
@@ -143,7 +156,8 @@ export function useRegisterController() {
       );
 
       if (geoLocation.status !== 200) {
-        return geoLocation;
+        response.message = geoLocation.message;
+        return response;
       }
 
       try {
@@ -170,7 +184,7 @@ export function useRegisterController() {
         return result;
       } catch (error) {
         await storageService.deleteFromStorage(photo.payload!.url);
-        return { status: 500, message: "Falha ao criar restaurante" };
+        return response;
       }
     },
   });
@@ -182,7 +196,7 @@ export function useRegisterController() {
 
     if (response.status === 200) {
       toast.success(response.message);
-      singin(response.payload!.accessToken);
+      singin(response.payload!.refreshToken);
     } else {
       toast.error(response.message);
     }

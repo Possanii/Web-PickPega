@@ -4,7 +4,6 @@ import { Separator } from "../../../../../../../components/Separator";
 
 export function CardCategory({
   category,
-  index,
 }: {
   category: string;
   index: number;

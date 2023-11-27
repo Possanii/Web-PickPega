@@ -1,6 +1,5 @@
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { User, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../../api/FirebaseConfig";
-import cResponse from "../../interface/cResponse";
 
 const auth = getAuth(app);
 
@@ -9,8 +8,18 @@ interface SigninProps {
   password: string;
 }
 
+interface SigninResponse {
+  status: number;
+  message: string;
+  payload: User | null;
+}
+
 export async function signin({ email, password }: SigninProps) {
-  const response: cResponse = { status: 400, message: "Algo deu errado" };
+  const response: SigninResponse = {
+    status: 400,
+    message: "Algo deu errado",
+    payload: null,
+  };
   await signInWithEmailAndPassword(auth, email, password)
     .then(async (userCredential) => {
       // Signed in

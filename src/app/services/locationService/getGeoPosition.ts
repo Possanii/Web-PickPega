@@ -1,8 +1,20 @@
 import axios from "axios";
-import cResponse from "../../interface/cResponse";
+
+interface GeoResponse {
+  status: number;
+  message: string;
+  payload: {
+    lat: number;
+    lng: number;
+  } | null;
+}
 
 export async function getGeoPosition(zip: number) {
-  const response: cResponse = { status: 400, message: "Algo deu errado" };
+  const response: GeoResponse = {
+    status: 400,
+    message: "Algo deu errado",
+    payload: null,
+  };
   try {
     const res = await axios.get(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=${
@@ -19,13 +31,11 @@ export async function getGeoPosition(zip: number) {
     } else {
       response.status = 404;
       response.message = "Coordenadas não encontrada";
-      response.payload = { lat: null, lng: null };
       return response;
     }
   } catch (error) {
     response.status = 500;
     response.message = "Algo deu errado ao capturar as coordenadas";
-    response.payload = { lat: null, lng: null };
     return response;
   }
 }

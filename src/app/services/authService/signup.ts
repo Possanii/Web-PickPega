@@ -1,11 +1,10 @@
+import { User } from "firebase/auth";
 import { instance } from "../../api/FirebaseConfig";
 
 interface SignupResponse {
   status: number;
   message: string;
-  payload: {
-    accessToken: string;
-  };
+  payload: User | null;
 }
 
 interface SignupProps {

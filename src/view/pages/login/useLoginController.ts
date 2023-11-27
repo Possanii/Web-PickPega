@@ -46,7 +46,7 @@ export function useLoginController() {
 
     if (response.status === 200) {
       toast.success(response.message);
-      singin(response.payload!.accessToken);
+      singin(response.payload!.refreshToken);
     } else {
       toast.error(response.message);
     }
