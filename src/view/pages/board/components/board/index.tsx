@@ -14,7 +14,7 @@ export function DashboardOrders() {
         </div>
       )}
       {!isFetching && (
-        <div className="flex flex-1 gap-8 mt-10 overflow-y-auto">
+        <div className="flex flex-1 gap-8 mt-10 ">
           <BoardColumn
             orders={orders.filter((order) => order.status === "Em espera")}
             icon="🕑"

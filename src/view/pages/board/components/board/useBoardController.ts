@@ -9,7 +9,6 @@ import { OrderService } from "../../../../../app/services/ordersService";
 import { useBoard } from "../boardContext/useBoard";
 import { useUser } from "../../../../../app/hooks/useUser";
 import { firestore } from "../../../../../app/api/FirebaseConfig";
-import toast from "react-hot-toast";
 
 export function useBoardController() {
   const { orderBeingViewed } = useBoard();
@@ -35,7 +34,7 @@ export function useBoardController() {
     const docs: Array<DocumentData> = [];
     snapshot.docs.forEach((doc) => docs.push(doc.data()));
     docs.sort((a, b) => {
-      return a.date.localeCompare(b.date);
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
     snapshot.docChanges().forEach(async (change) => {
       if (change.type === "added" && orders && !isFetching) {
@@ -43,7 +42,6 @@ export function useBoardController() {
           docs.length !== orders.length &&
           docs!.at(-1)!.name !== orders.at(-1)!.name
         ) {
-          toast.success("Novo pedido encontrado 👨‍🍳");
           queryClient.invalidateQueries({ queryKey: ["orders"] });
         }
       }

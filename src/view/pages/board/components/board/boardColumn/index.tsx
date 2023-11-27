@@ -9,7 +9,7 @@ interface BoardColumnProps {
 
 export function BoardColumn({ icon, title, orders }: BoardColumnProps) {
   return (
-    <div className="flex flex-col gap-4 w-full min-w-[300px] p-2 border rounded-2xl">
+    <div className="flex flex-col gap-4 w-full min-w-[300px] p-2 border rounded-2xl overflow-y-auto">
       <header className="flex justify-center items-center gap-2 p-2 text-sm">
         <span>{icon}</span>
         <strong>{title}</strong>
