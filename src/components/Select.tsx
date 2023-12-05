@@ -1,12 +1,12 @@
 // your-select.jsx
-import { forwardRef } from "react";
-import * as RdxSelect from "@radix-ui/react-select";
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   CrossCircledIcon,
 } from "@radix-ui/react-icons";
+import * as RdxSelect from "@radix-ui/react-select";
+import { forwardRef } from "react";
 import { cn } from "../app/utils/cn";
 
 interface SelectProps {
@@ -35,7 +35,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     forwardedRef
   ) => {
     return (
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full ">
         <RdxSelect.Root
           name={name}
           value={value}
@@ -52,7 +52,11 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             </RdxSelect.Icon>
           </RdxSelect.Trigger>
           <RdxSelect.Portal>
-            <RdxSelect.Content className="z-[1000] overflow-hidden bg-white rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+            <RdxSelect.Content
+              position="popper"
+              sideOffset={5}
+              className="z-[1000] max-h-[250px] overflow-y-scroll bg-white rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+            >
               <RdxSelect.ScrollUpButton className="flex items-center justify-center h-[25px] bg-white cursor-default">
                 <ChevronUpIcon />
               </RdxSelect.ScrollUpButton>

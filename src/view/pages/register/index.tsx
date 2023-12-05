@@ -1,19 +1,19 @@
+import { useState } from "react";
+import { Controller } from "react-hook-form";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { CATEGORIES } from "../../../app/constants/categories";
+import { hours } from "../../../app/constants/hours";
+import { UF } from "../../../app/constants/uf";
+import { weekDays } from "../../../app/constants/weekDays";
+import { searchAddressByZip } from "../../../app/services/locationService/searchAddressByZip";
+import background from "../../../assets/images/background.png";
 import { Button } from "../../../components/Button";
 import { Card } from "../../../components/Card";
 import { Container } from "../../../components/Container";
 import { Input } from "../../../components/Input";
-import background from "../../../assets/images/background.png";
-import { useRegisterController } from "./useRegisterController";
-import { Link } from "react-router-dom";
 import { Select, SelectItem } from "../../../components/Select";
-import { CATEGORIES } from "../../../app/constants/categories";
-import { UF } from "../../../app/constants/uf";
-import { searchAddressByZip } from "../../../app/services/locationService/searchAddressByZip";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { Controller } from "react-hook-form";
-import { weekDays } from "../../../app/constants/weekDays";
-import { hours } from "../../../app/constants/hours";
+import { useRegisterController } from "./useRegisterController";
 
 export function Register() {
   const [loading, setLoading] = useState(false);

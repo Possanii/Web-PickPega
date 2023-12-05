@@ -24,7 +24,7 @@ export function AuthProvide({ children }: { children: React.ReactNode }) {
     return Boolean(storedAccessToken);
   });
 
-  const { isError, isFetching, isSuccess, remove } = useQuery({
+  const { isError, isFetching, isSuccess } = useQuery({
     queryKey: ["users", "me"],
     queryFn: async () => await usersServices.getMe(),
     enabled: signedIn,
@@ -40,12 +40,10 @@ export function AuthProvide({ children }: { children: React.ReactNode }) {
   const signout = useCallback(() => {
     localStorage.removeItem(localStorageKeys.ACCESS_TOKEN);
 
-    remove();
-
     setSignedIn(false);
 
     queryClient.removeQueries();
-  }, [remove, queryClient]);
+  }, [queryClient]);
 
   useEffect(() => {
     if (isError) {

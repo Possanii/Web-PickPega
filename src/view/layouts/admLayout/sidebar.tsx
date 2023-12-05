@@ -1,11 +1,11 @@
 import { FC, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import { nav } from "../../../_nav";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../app/hooks/useAuth";
-import { Button } from "../../../components/Button";
 import { useUser } from "../../../app/hooks/useUser";
+import { Button } from "../../../components/Button";
 
 interface SidebarProps {
   setExpand: (value: boolean) => void;
@@ -239,7 +239,11 @@ const Sidebar: FC<SidebarProps> = ({ setExpand }) => {
                       : "h-12 w-12"
                   }`}
                 >
-                  <img src={profilePic} className="block" alt="" />
+                  <img
+                    src={profilePic}
+                    className="block h-full w-full"
+                    alt=""
+                  />
                 </div>
                 <div
                   className={`text-base font-semibold text-slate-700 mt-3 truncate duration-300 ${
