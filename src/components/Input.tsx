@@ -1,6 +1,6 @@
+import { CrossCircledIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { ComponentProps, forwardRef } from "react";
 import { cn } from "../app/utils/cn";
-import { CrossCircledIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 interface InputProps extends ComponentProps<"input"> {
   name: string;
@@ -34,7 +34,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <label
           htmlFor={inputId}
-          className="absolute text-xs left-3 top-1.5 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 transition-all"
+          className="peer-disabled:opacity-20 absolute text-xs left-3 top-1.5 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 transition-all "
         >
           {placeholder}
         </label>

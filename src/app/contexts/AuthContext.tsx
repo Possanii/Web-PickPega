@@ -1,9 +1,9 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createContext, useCallback, useEffect, useState } from "react";
-import { localStorageKeys } from "../config/localStorageKeys";
-import { useQuery } from "@tanstack/react-query";
-import { usersServices } from "../services/usersService";
 import toast from "react-hot-toast";
 import { PageLoader } from "../../components/PageLoader";
+import { localStorageKeys } from "../config/localStorageKeys";
+import { usersServices } from "../services/usersService";
 
 interface AuthContextValue {
   signedIn: boolean;
@@ -14,6 +14,8 @@ interface AuthContextValue {
 export const AuthContext = createContext({} as AuthContextValue);
 
 export function AuthProvide({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient();
+
   const [signedIn, setSignedIn] = useState(() => {
     const storedAccessToken = localStorage.getItem(
       localStorageKeys.ACCESS_TOKEN
@@ -41,7 +43,9 @@ export function AuthProvide({ children }: { children: React.ReactNode }) {
     remove();
 
     setSignedIn(false);
-  }, [remove]);
+
+    queryClient.removeQueries();
+  }, [remove, queryClient]);
 
   useEffect(() => {
     if (isError) {

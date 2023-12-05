@@ -1,12 +1,12 @@
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 import { Button } from "../../../../../../components/Button";
 import { Input } from "../../../../../../components/Input";
+import { InputCurrency } from "../../../../../../components/InputCurrency";
+import { InputHours } from "../../../../../../components/InputHours";
 import { Modal } from "../../../../../../components/Modal";
 import { Select, SelectItem } from "../../../../../../components/Select";
 import { useNewProductModalController } from "./useNewProductModalController";
-import { InputCurrency } from "../../../../../../components/InputCurrency";
-import { InputHours } from "../../../../../../components/InputHours";
-import { useState } from "react";
 
 export function NewProductModal() {
   const [isNewCategoryDisable, setIsNewCategoryDisable] = useState(true);
